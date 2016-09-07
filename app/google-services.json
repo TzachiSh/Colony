@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "835818181726",
+    "firebase_url": "https://colony-1323.firebaseio.com",
+    "project_id": "colony-1323",
+    "storage_bucket": "colony-1323.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835818181726:android:8d635ad77820978b",
+        "android_client_info": {
+          "package_name": "test.colony"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "835818181726-q1qvjca4318dpcsc04oct450a644b1dq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwwPGuUNVO0YDorz9iweBayI6rzFqqLkQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835818181726:android:626d77a4c2720dbe",
+        "android_client_info": {
+          "package_name": "test1.colony"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "835818181726-q1qvjca4318dpcsc04oct450a644b1dq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwwPGuUNVO0YDorz9iweBayI6rzFqqLkQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

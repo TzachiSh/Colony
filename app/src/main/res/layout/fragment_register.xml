@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.Register">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:text="Register"
+        android:id="@+id/textRegister"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="30dp"/>
+    <EditText
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/textRegister"
+        android:width="300dp"
+        android:hint="userName" />
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:width="300dp"
+        android:layout_below="@+id/userName"
+        android:layout_alignStart="@+id/userName"
+        android:inputType="textVisiblePassword"
+        android:hint="Password" />
+    <EditText
+        android:id="@+id/conPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/password"
+        android:layout_alignStart="@+id/password"
+        android:inputType="textVisiblePassword"
+        android:hint="Confirm password" />
+    <Button
+        android:id="@+id/reg_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/conPassword"
+        android:text="Register"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
