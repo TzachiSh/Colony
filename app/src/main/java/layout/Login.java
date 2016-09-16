@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -33,7 +32,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import test1.colony.ChatActivity;
+import test1.colony.MainActivity;
+import test1.colony.ServerIp;
 import test1.colony.MySingleton;
 import test1.colony.R;
 
@@ -46,8 +46,7 @@ public class Login extends Fragment {
     Button log_btn;
     TextView RegText;
     EditText Log_name, Log_password;
-    String name , password , token ;
-    String server_utl = "http://46.116.43.207/api/users";
+    String name , password , token,server_url ;
     AlertDialog.Builder builder;
     Register register ;
 
@@ -64,6 +63,8 @@ public class Login extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        server_url =  ServerIp.server + "api/Users";
 
         register =  new Register();
         log_btn = (Button)view.findViewById(R.id.log_btn);
@@ -87,7 +88,7 @@ public class Login extends Fragment {
                 }
                 else
                 {
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, server_utl, new Response.Listener<String>() {
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             try {
@@ -163,9 +164,14 @@ public class Login extends Fragment {
                     editor.putString("Name",name);
                     editor.apply();
 
-                    Intent intent = new Intent(getActivity(),
-                            ChatActivity.class);
-                    startActivity(intent);
+
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    ChatsListFragment chatsListFragment = new ChatsListFragment();
+                    fragmentTransaction.replace(R.id.fragment_container, chatsListFragment, "try");
+                    fragmentTransaction.commit();
+
+
                 }
                 else if (code.equals("log_error"))
                 {

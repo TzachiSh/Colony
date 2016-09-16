@@ -1,5 +1,6 @@
 package test1.colony;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,27 +27,32 @@ public class ChatActivity extends AppCompatActivity {
     EditText SendMessage , ReceiverName;
     TextView GetMessage;
     Button Send_btn;
-    String message , receiverName , user;
-    String server_utl = "http://46.116.43.207/api/Messages";
+    String server_url ,message , receiverName , user ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        Intent intent = getIntent();
+
+        server_url = ServerIp.server +"api/Messages";
 
         SendMessage = (EditText)findViewById(R.id.post_text);
         GetMessage = (TextView)findViewById(R.id.get_text);
         Send_btn = (Button)findViewById(R.id.send_btn);
-        ReceiverName = (EditText)findViewById(R.id.receiverName);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         user = preferences.getString("Name", "");
+        receiverName = intent.getStringExtra(MainActivity.EXTRA_Chat_Name);
+        GetMessage.setText(intent.getStringExtra(MainActivity.EXTRA_Chat_Message));
 
 
         Send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 message = SendMessage.getText().toString();
-                receiverName = ReceiverName.getText().toString();
+
                 sendMessage(message ,receiverName);
             }
         });
@@ -59,7 +65,7 @@ public class ChatActivity extends AppCompatActivity {
 
     public void sendMessage(final String message , final String receiverName)
     {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, server_utl, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 

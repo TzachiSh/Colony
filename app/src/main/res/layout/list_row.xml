@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e7e6db"
+    android:paddingRight="10dp"
+    android:paddingBottom="8dp">
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/listItemDialogueImg"
+        android:src="@drawable/defaultuser"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Name"
+        android:id="@+id/listItemDialogueTitle"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/listItemDialogueImg"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:paddingLeft="10dp"
+        android:layout_marginBottom="2dp"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:focusable="false"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="message message message message message"
+        android:id="@+id/listItemDialogueBody"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/listItemDialogueImg"
+        android:layout_below="@id/listItemDialogueTitle"
+        android:paddingLeft="10dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:focusable="false"
+        />
+
+</RelativeLayout>

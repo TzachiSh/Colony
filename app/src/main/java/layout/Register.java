@@ -28,6 +28,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import test1.colony.MainActivity;
+import test1.colony.ServerIp;
 import test1.colony.MySingleton;
 import test1.colony.R;
 
@@ -37,17 +39,22 @@ import test1.colony.R;
 public class Register extends Fragment {
     Button Reg_btn;
     EditText Reg_name, Reg_password, Reg_conPassword;
-    String name, password, conPass , token;
-    String server_utl = "http://46.116.43.207/api/users";
+    String name, password, conPass , token ,server_url;
+
     AlertDialog.Builder builder;
 
     public Register() {
         // Required empty public constructor
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        server_url = ServerIp.server +"api/Users";
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         Reg_name = (EditText)view.findViewById(R.id.userName);
@@ -55,8 +62,6 @@ public class Register extends Fragment {
         Reg_conPassword = (EditText)view.findViewById(R.id.conPassword);
         Reg_btn = (Button)view.findViewById(R.id.reg_btn);
         token = FirebaseInstanceId.getInstance().getToken();
-
-
         builder = new AlertDialog.Builder(this.getActivity());
 
         Reg_btn.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +87,7 @@ public class Register extends Fragment {
                     }
                     else
                     {
-                        StringRequest stringRequest = new StringRequest(Request.Method.PUT, server_utl, new Response.Listener<String>() {
+                        StringRequest stringRequest = new StringRequest(Request.Method.PUT, server_url, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 try {

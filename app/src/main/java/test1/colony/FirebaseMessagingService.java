@@ -10,17 +10,23 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-
-import test1.colony.MainActivity;
+import android.support.v4.content.LocalBroadcastManager;
 
 
 public class FirebaseMessagingService extends  com.google.firebase.messaging.FirebaseMessagingService {
+
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage)  {
 
 
         sendNotification(remoteMessage.getData().get("message") ,remoteMessage.getData().get("contentTitle"));
+        String title =remoteMessage.getData().get("contentTitle");
+        String message = remoteMessage.getData().get("message");
+        retrieveMessage(message ,title );
+
+
+
 
 
 
@@ -49,5 +55,12 @@ public class FirebaseMessagingService extends  com.google.firebase.messaging.Fir
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
+    private void retrieveMessage(String message, String chatName) {
+        Intent intent = new Intent();
+        intent.setAction(MainActivity.ACTION_Message_CHANGED);
+        intent.putExtra(MainActivity.EXTRA_Chat_Message, message);
+        intent.putExtra(MainActivity.EXTRA_Chat_Name,chatName);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
 
 }
