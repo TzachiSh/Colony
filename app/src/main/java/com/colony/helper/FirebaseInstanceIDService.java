@@ -1,4 +1,4 @@
-package test1.colony;
+package com.colony.helper;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;

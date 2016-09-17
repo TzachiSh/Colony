@@ -1,5 +1,6 @@
-package test1.colony;
+package com.colony.helper;
 
+import com.colony.activity.MainActivity;
 import com.google.firebase.messaging.RemoteMessage;
 
 
@@ -7,8 +8,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -23,7 +26,14 @@ public class FirebaseMessagingService extends  com.google.firebase.messaging.Fir
         sendNotification(remoteMessage.getData().get("message") ,remoteMessage.getData().get("contentTitle"));
         String title =remoteMessage.getData().get("contentTitle");
         String message = remoteMessage.getData().get("message");
-        retrieveMessage(message ,title );
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String log_user = preferences.getString(MainActivity.Shared_User_Login, "");
+
+        if(!log_user.equals(""))
+        {
+            retrieveMessage(message, title);
+        }
 
 
 

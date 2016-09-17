@@ -1,4 +1,4 @@
-package layout;
+package com.colony.fragments;
 
 
 
@@ -32,26 +32,26 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import test1.colony.MainActivity;
-import test1.colony.ServerIp;
-import test1.colony.MySingleton;
+import com.colony.activity.MainActivity;
+import com.colony.model.ServerIp;
+import com.colony.helper.MySingleton;
 import test1.colony.R;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Login extends Fragment {
+public class LoginFragment extends Fragment {
 
     Button log_btn;
     TextView RegText;
     EditText Log_name, Log_password;
-    String name , password , token,server_url ;
+    String log_name , log_password , token,server_url ;
     AlertDialog.Builder builder;
-    Register register ;
+    RegisterFragment register ;
 
 
-    public Login() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
@@ -66,7 +66,7 @@ public class Login extends Fragment {
 
         server_url =  ServerIp.server + "api/Users";
 
-        register =  new Register();
+        register =  new RegisterFragment();
         log_btn = (Button)view.findViewById(R.id.log_btn);
         Log_name = (EditText)view.findViewById(R.id.userName);
         Log_password = (EditText)view.findViewById(R.id.password);
@@ -77,10 +77,10 @@ public class Login extends Fragment {
         log_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name = Log_name.getText().toString();
-                password = Log_password.getText().toString();
+                log_name = Log_name.getText().toString();
+                log_password = Log_password.getText().toString();
                 token = FirebaseInstanceId.getInstance().getToken();
-                if(name.equals("")||password.equals(""))
+                if(log_name.equals("")||log_password.equals(""))
                 {
                     builder.setTitle("Something went wrong....");
                     builder.setMessage("Please fill all the fields...");
@@ -117,8 +117,8 @@ public class Login extends Fragment {
                         @Override
                         protected Map<String, String> getParams() throws AuthFailureError {
                             Map<String ,String> params = new HashMap<String, String>();
-                            params.put("UserName",name);
-                            params.put("Password",password);
+                            params.put("UserName", log_name);
+                            params.put("Password",log_password);
                             params.put("Token",token);
                             return params;
                         }
@@ -144,31 +144,31 @@ public class Login extends Fragment {
         return view;
     }
 
-    private void displayAlert(final String code) {
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(code.equals("input_error"))
-                {
-                    Log_password.setText("");
+     private void displayAlert(final String code) {
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(code.equals("input_error"))
+                            {
+                                Log_password.setText("");
 
 
 
-                }
-                else if (code.equals("log_success"))
-                {
-                    //when user login..
+                            }
+                            else if (code.equals("log_success"))
+                            {
+                                //when user login..
 
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("Name",name);
-                    editor.apply();
+                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString(MainActivity.Shared_User_Login , log_name);
+                                editor.apply();
 
 
-                    FragmentManager fragmentManager = getFragmentManager();
+                                FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    ChatsListFragment chatsListFragment = new ChatsListFragment();
-                    fragmentTransaction.replace(R.id.fragment_container, chatsListFragment, "try");
+                    ChatsFragment chatsFragment = new ChatsFragment();
+                    fragmentTransaction.replace(R.id.fragment_container, chatsFragment, MainActivity.Fragment_Main_Replaced);
                     fragmentTransaction.commit();
 
 
@@ -190,7 +190,7 @@ public class Login extends Fragment {
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container,register ,"try");
+        fragmentTransaction.replace(R.id.fragment_container,register ,MainActivity.Fragment_Main_Replaced);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 

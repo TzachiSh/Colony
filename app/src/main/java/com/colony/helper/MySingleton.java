@@ -1,7 +1,6 @@
-package test1.colony;
+package com.colony.helper;
 
 import android.content.Context;
-import android.support.v4.util.Pools;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;

@@ -1,4 +1,4 @@
-package test1.colony;
+package com.colony.helper;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,33 +8,36 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.colony.model.Chat;
+
 import java.util.ArrayList;
-import java.util.List;
+
+import test1.colony.R;
 
 /**
  * Created by zahi on 11/09/2016.
  */
-public class UserAdapter extends ArrayAdapter<User> {
+public class ChatAdapter extends ArrayAdapter<Chat> {
     public static class ViewHolder{
         TextView title;
         TextView message;
         ImageView userIcon;
 
     }
-    public  UserAdapter (Context context, ArrayList<User> users) {
+    public ChatAdapter(Context context, ArrayList<Chat> users) {
         super(context,0,users);
     }
 
     @Override
     public View getView(int position , View convertView, ViewGroup parent) {
         //get the data item for this position
-        User user = getItem(position);
+        Chat user = getItem(position);
 
         //create a new viewholder
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_row, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.custom_chat_list_row, parent, false);
 
             //set our views to our view holder so that we no longer have to go back and use find view
             //by id every time we have a new row

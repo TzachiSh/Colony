@@ -1,4 +1,4 @@
-package layout;
+package com.colony.fragments;
 
 
 
@@ -28,22 +28,22 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import test1.colony.MainActivity;
-import test1.colony.ServerIp;
-import test1.colony.MySingleton;
+import com.colony.activity.MainActivity;
+import com.colony.model.ServerIp;
+import com.colony.helper.MySingleton;
 import test1.colony.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Register extends Fragment {
+public class RegisterFragment extends Fragment {
     Button Reg_btn;
     EditText Reg_name, Reg_password, Reg_conPassword;
     String name, password, conPass , token ,server_url;
 
     AlertDialog.Builder builder;
 
-    public Register() {
+    public RegisterFragment() {
         // Required empty public constructor
     }
 
@@ -147,10 +147,10 @@ public class Register extends Fragment {
                 }
                 else if (code.equals("reg_success"))
                 {
-                    Login login = new Login();
+                    LoginFragment loginFragment = new LoginFragment();
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_container,login ,"try");
+                    fragmentTransaction.replace(R.id.fragment_container, loginFragment, MainActivity.Fragment_Main_Replaced);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }

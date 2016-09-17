@@ -1,18 +1,19 @@
-package test1.colony;
+package com.colony.model;
 
 /**
- * Created by zahi on 11/09/2016.
+ * Created by zahi on 17/09/2016.
  */
-public class User {
+public class Chat {
+
     private  String title ,message;
     private  long userId ,dateCreatedMilli;
 
-    public User(String title, String message) {
+    public Chat(String title, String message) {
         this.title = title;
         this.message = message;
     }
 
-    public User(String title, String message, long userId, long dateCreatedMilli) {
+    public Chat(String title, String message, long userId, long dateCreatedMilli) {
         this.title = title;
         this.message = message;
         this.userId = userId;
