@@ -6,17 +6,17 @@ package com.colony.model;
 public class Chat {
 
     private  String title ,message;
-    private  long userId ,dateCreatedMilli;
+    private  long chatId ,dateCreatedMilli;
 
     public Chat(String title, String message) {
         this.title = title;
         this.message = message;
     }
 
-    public Chat(String title, String message, long userId, long dateCreatedMilli) {
+    public Chat(String title, String message, long chatId, long dateCreatedMilli) {
         this.title = title;
         this.message = message;
-        this.userId = userId;
+        this.chatId = chatId;
         this.dateCreatedMilli = dateCreatedMilli;
     }
 
@@ -29,7 +29,7 @@ public class Chat {
     }
 
     public long getId() {
-        return userId;
+        return chatId;
     }
 
     public long getDate() {
@@ -38,8 +38,8 @@ public class Chat {
 
     @Override
     public String toString() {
-        return "User{" +
-                "userId=" + userId +
+        return "Chat{" +
+                "ChatId=" + chatId +
                 ", title='" + title + '\'' +
                 ", message='" + message + '\'' +
                 '}';
