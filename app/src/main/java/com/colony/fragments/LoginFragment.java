@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.colony.helper.Contract;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 
@@ -35,7 +36,7 @@ import java.util.Map;
 import com.colony.activity.MainActivity;
 import com.colony.model.ServerIp;
 import com.colony.helper.MySingleton;
-import test1.colony.R;
+import com.colony.R;
 
 
 /**
@@ -161,14 +162,14 @@ public class LoginFragment extends Fragment {
 
                                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                                 SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString(MainActivity.Shared_User_Login , log_name);
+                                editor.putString(Contract.Shared_User_Login , log_name);
                                 editor.apply();
 
 
                                 FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     ChatsFragment chatsFragment = new ChatsFragment();
-                    fragmentTransaction.replace(R.id.fragment_container, chatsFragment, MainActivity.Fragment_Main_Replaced);
+                    fragmentTransaction.replace(R.id.fragment_container, chatsFragment, Contract.Fragment_Main_Replaced);
                     fragmentTransaction.commit();
 
 
@@ -190,7 +191,7 @@ public class LoginFragment extends Fragment {
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container,register ,MainActivity.Fragment_Main_Replaced);
+        fragmentTransaction.replace(R.id.fragment_container,register , Contract.Fragment_Main_Replaced);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText_nameChat"
         android:ems="10"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:layout_below="@id/textView"
         />
 

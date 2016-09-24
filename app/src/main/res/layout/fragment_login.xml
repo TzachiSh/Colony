@@ -5,14 +5,6 @@
     tools:context="com.colony.fragments.LoginFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:text="Login"
-        android:id="@+id/textLogin"
-        android:layout_marginTop="15dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize="30dp"/>
     <EditText
         android:id="@+id/userName"
         android:layout_width="wrap_content"
@@ -22,15 +14,7 @@
         android:layout_below="@+id/textLogin"
         android:width="300dp"
         android:hint="userName" />
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:width="300dp"
-        android:layout_below="@+id/userName"
-        android:layout_alignStart="@+id/userName"
-        android:hint="Password" />
+
     <Button
         android:id="@+id/log_btn"
         android:layout_width="wrap_content"
@@ -49,5 +33,25 @@
         android:textSize="15dp"
         android:clickable="true"
         android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:text="Login"
+        android:id="@+id/textLogin"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:width="300dp"
+        android:hint="Password"
+        android:layout_below="@+id/userName"
+        android:layout_alignStart="@+id/userName" />
 
 </RelativeLayout>

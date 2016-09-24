@@ -29,11 +29,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import com.colony.helper.Contract;
 import com.colony.model.Chat;
 import com.colony.activity.ChatActivity;
 import com.colony.activity.MainActivity;
 import com.colony.helper.MySingleton;
-import test1.colony.R;
+import com.colony.R;
 import com.colony.model.ServerIp;
 
 import com.colony.helper.ChatAdapter;
@@ -72,7 +73,7 @@ public class ChatsFragment extends ListFragment {
         chatAdapter = new ChatAdapter(getActivity(), chats);
         setListAdapter(chatAdapter);
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(MainActivity.ACTION_Message_CHANGED));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Contract.ACTION_Message_CHANGED));
 
     }
 
@@ -83,8 +84,8 @@ public class ChatsFragment extends ListFragment {
         public void onReceive(Context context, Intent intent) {
             int i;
             int j =0;
-            String message = intent.getStringExtra(MainActivity.EXTRA_Chat_Message);
-            String title = intent.getStringExtra(MainActivity.EXTRA_Chat_Name);
+            String message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
+            String title = intent.getStringExtra(Contract.EXTRA_Chat_Name);
             for(i= 0 ; i<= chats.size()-1; i++ )
             {
                 if (title.equals(chats.get(i).getTitle()))
@@ -194,8 +195,8 @@ public class ChatsFragment extends ListFragment {
         Chat user = (Chat) getListAdapter().getItem(position);
 
         Intent intent =  new Intent(getActivity(), ChatActivity.class);
-        intent.putExtra(MainActivity.EXTRA_Chat_Name, user.getTitle());
-        intent.putExtra(MainActivity.EXTRA_Chat_Message, user.getMessage());
+        intent.putExtra(Contract.EXTRA_Chat_Name, user.getTitle());
+        intent.putExtra(Contract.EXTRA_Chat_Message, user.getMessage());
         startActivity(intent);
 
     }

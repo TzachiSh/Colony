@@ -12,7 +12,7 @@ import com.colony.model.Chat;
 
 import java.util.ArrayList;
 
-import test1.colony.R;
+import com.colony.R;
 
 /**
  * Created by zahi on 11/09/2016.
@@ -67,6 +67,8 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
 
 
     }
+
+
 
 
 }

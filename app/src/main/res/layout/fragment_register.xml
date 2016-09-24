@@ -49,6 +49,6 @@
         android:layout_below="@+id/conPassword"
         android:text="Register"
         android:layout_marginTop="15dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

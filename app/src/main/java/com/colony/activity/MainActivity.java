@@ -11,18 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import com.colony.fragments.ChatsFragment;
 import com.colony.fragments.LoginFragment;
 
-import test1.colony.R;
+import com.colony.R;
+import com.colony.helper.Contract;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String EXTRA_Chat_ID ="com.colony.identifier"; // key id of the chat
-    public static final String EXTRA_Chat_Name ="com.colony.name";     // key name of the sender
-    public static final String EXTRA_Chat_Message = "com.colony.message"; //key message
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static final String ACTION_Message_CHANGED = "com.colony.changed"; //key check if receive message
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static final String Shared_User_Login ="com.colony.login"; // key check if the user login
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static final String Fragment_Main_Replaced = "com.colony.replaced"; //key for replaced fragment in the main activity
+
 
 
 //////////////////
@@ -36,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        log_user = preferences.getString(Shared_User_Login, "");
+        log_user = preferences.getString(Contract.Shared_User_Login, "");
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -45,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             LoginFragment loginFragment = new LoginFragment();
-            fragmentTransaction.replace(R.id.fragment_container, loginFragment, Fragment_Main_Replaced);
+            fragmentTransaction.replace(R.id.fragment_container, loginFragment, Contract.Fragment_Main_Replaced);
             fragmentTransaction.commit();
 
 
@@ -54,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             ChatsFragment chatsFragment = new ChatsFragment();
-            fragmentTransaction.replace(R.id.fragment_container, chatsFragment, Fragment_Main_Replaced);
+            fragmentTransaction.replace(R.id.fragment_container, chatsFragment, Contract.Fragment_Main_Replaced);
             fragmentTransaction.commit();
 
 

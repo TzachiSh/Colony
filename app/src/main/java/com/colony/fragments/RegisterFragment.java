@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.colony.helper.Contract;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
@@ -31,7 +32,7 @@ import java.util.Map;
 import com.colony.activity.MainActivity;
 import com.colony.model.ServerIp;
 import com.colony.helper.MySingleton;
-import test1.colony.R;
+import com.colony.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -150,7 +151,7 @@ public class RegisterFragment extends Fragment {
                     LoginFragment loginFragment = new LoginFragment();
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_container, loginFragment, MainActivity.Fragment_Main_Replaced);
+                    fragmentTransaction.replace(R.id.fragment_container, loginFragment, Contract.Fragment_Main_Replaced);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }

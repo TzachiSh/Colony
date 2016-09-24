@@ -15,6 +15,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
+import java.util.Date;
+
 
 public class FirebaseMessagingService extends  com.google.firebase.messaging.FirebaseMessagingService {
 
@@ -26,13 +28,14 @@ public class FirebaseMessagingService extends  com.google.firebase.messaging.Fir
         sendNotification(remoteMessage.getData().get("message") ,remoteMessage.getData().get("contentTitle"));
         String title =remoteMessage.getData().get("contentTitle");
         String message = remoteMessage.getData().get("message");
+        String date = remoteMessage.getData().get("date").toString();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String log_user = preferences.getString(MainActivity.Shared_User_Login, "");
+        String log_user = preferences.getString(Contract.Shared_User_Login, "");
 
         if(!log_user.equals(""))
         {
-            retrieveMessage(message, title);
+            retrieveMessage(message, title , date);
         }
 
 
@@ -65,11 +68,12 @@ public class FirebaseMessagingService extends  com.google.firebase.messaging.Fir
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
-    private void retrieveMessage(String message, String chatName) {
+    private void retrieveMessage(String message, String chatName , String date) {
         Intent intent = new Intent();
-        intent.setAction(MainActivity.ACTION_Message_CHANGED);
-        intent.putExtra(MainActivity.EXTRA_Chat_Message, message);
-        intent.putExtra(MainActivity.EXTRA_Chat_Name,chatName);
+        intent.setAction(Contract.ACTION_Message_CHANGED);
+        intent.putExtra(Contract.EXTRA_Chat_Message, message);
+        intent.putExtra(Contract.EXTRA_Chat_Name,chatName);
+        intent.putExtra(Contract.EXTRA_Chat_Date,date);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
