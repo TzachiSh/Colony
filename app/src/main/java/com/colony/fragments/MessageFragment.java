@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +55,8 @@ public class MessageFragment extends Fragment {
     private ArrayList<Message> messages;
 
     //the id of the log_user
-    int userId = 1;
-    String get_message,sender_name,log_user,receiverName,snd_message,date_time;
+    int userId = -1;
+    String get_message,sender_name,log_user,receiverName,snd_message,date_time ,id;
 
     EditText Snd_Message;
     Button Snd_btn;
@@ -96,13 +97,14 @@ public class MessageFragment extends Fragment {
         Snd_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                userId = -1;
                 snd_message = Snd_Message.getText().toString();
                 sendMessage(snd_message);
                 addMessage(userId,snd_message,date_time,"You");
 
             }
         });
+
 
         //get Data...
         Intent intent = getActivity().getIntent();
@@ -125,11 +127,9 @@ public class MessageFragment extends Fragment {
             get_message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
             sender_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
             date_time = intent.getStringExtra(Contract.EXTRA_Chat_Date);
+            userId = intent.getIntExtra(Contract.EXTRA_Chat_UserId,-1);
 
-
-
-            ///the number need to change!!!!!!!!!!!
-            addMessage(2, get_message, date_time, sender_name);
+            addMessage(userId, get_message, date_time, sender_name);
 
 
         }
