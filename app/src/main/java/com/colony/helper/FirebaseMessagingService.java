@@ -20,22 +20,26 @@ import java.util.Date;
 
 public class FirebaseMessagingService extends  com.google.firebase.messaging.FirebaseMessagingService {
 
-
+    String title ,message ,date ;
+    int userId;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage)  {
 
 
         sendNotification(remoteMessage.getData().get("message") ,remoteMessage.getData().get("contentTitle"));
-        String title =remoteMessage.getData().get("contentTitle");
-        String message = remoteMessage.getData().get("message");
-        String date = remoteMessage.getData().get("date").toString();
+        title = remoteMessage.getData().get("contentTitle");
+        message = remoteMessage.getData().get("message");
+        date = remoteMessage.getData().get("date").toString();
+        userId = remoteMessage.getTtl();
+
+
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String log_user = preferences.getString(Contract.Shared_User_Login, "");
 
         if(!log_user.equals(""))
         {
-            retrieveMessage(message, title , date);
+            retrieveMessage();
         }
 
 
@@ -68,12 +72,13 @@ public class FirebaseMessagingService extends  com.google.firebase.messaging.Fir
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
-    private void retrieveMessage(String message, String chatName , String date) {
+    private void retrieveMessage() {
         Intent intent = new Intent();
         intent.setAction(Contract.ACTION_Message_CHANGED);
         intent.putExtra(Contract.EXTRA_Chat_Message, message);
-        intent.putExtra(Contract.EXTRA_Chat_Name,chatName);
+        intent.putExtra(Contract.EXTRA_Chat_Name,title);
         intent.putExtra(Contract.EXTRA_Chat_Date,date);
+        intent.putExtra(Contract.Extra_Chat_UserId,userId);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

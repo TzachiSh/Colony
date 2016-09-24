@@ -54,7 +54,7 @@ public class MessageFragment extends Fragment {
     private ArrayList<Message> messages;
 
     //the id of the log_user
-    int userId = 1;
+    int userId = -1;
     String get_message,sender_name,log_user,receiverName,snd_message,date_time;
 
     EditText Snd_Message;
@@ -98,6 +98,7 @@ public class MessageFragment extends Fragment {
             public void onClick(View v) {
 
                 snd_message = Snd_Message.getText().toString();
+                userId = -1;
                 sendMessage(snd_message);
                 addMessage(userId,snd_message,date_time,"You");
 
@@ -125,11 +126,10 @@ public class MessageFragment extends Fragment {
             get_message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
             sender_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
             date_time = intent.getStringExtra(Contract.EXTRA_Chat_Date);
-
-
+            userId = intent.getIntExtra(Contract.Extra_Chat_UserId,-1);
 
             ///the number need to change!!!!!!!!!!!
-            addMessage(2, get_message, date_time, sender_name);
+            addMessage(userId, get_message, date_time, sender_name);
 
 
         }
