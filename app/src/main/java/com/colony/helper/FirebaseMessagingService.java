@@ -15,13 +15,11 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
-import java.util.Date;
-
 
 public class FirebaseMessagingService extends  com.google.firebase.messaging.FirebaseMessagingService {
 
-    String title ,message ,date ;
-    int userId;
+    String title ,message ,date,number;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage)  {
 
@@ -30,12 +28,12 @@ public class FirebaseMessagingService extends  com.google.firebase.messaging.Fir
         title = remoteMessage.getData().get("contentTitle");
         message = remoteMessage.getData().get("message");
         date = remoteMessage.getData().get("date").toString();
-        userId = remoteMessage.getTtl();
+        number = remoteMessage.getData().get("tickerText");
 
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String log_user = preferences.getString(Contract.Shared_User_Login, "");
+        String log_user = preferences.getString(Contract.Shared_User_Number, "");
 
         if(!log_user.equals(""))
         {
@@ -78,7 +76,7 @@ public class FirebaseMessagingService extends  com.google.firebase.messaging.Fir
         intent.putExtra(Contract.EXTRA_Chat_Message, message);
         intent.putExtra(Contract.EXTRA_Chat_Name,title);
         intent.putExtra(Contract.EXTRA_Chat_Date,date);
-        intent.putExtra(Contract.Extra_Chat_UserId,userId);
+        intent.putExtra(Contract.EXTRA_Chat_Number,number);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

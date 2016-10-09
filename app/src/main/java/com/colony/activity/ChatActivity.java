@@ -12,10 +12,6 @@ import com.colony.helper.Contract;
 
 public class ChatActivity extends AppCompatActivity {
 
-    EditText SendMessage ;
-    TextView GetMessage;
-    Button Send_btn;
-    String server_url , user ,get_message, send_message ;
     public static String receiver_name;
 
 

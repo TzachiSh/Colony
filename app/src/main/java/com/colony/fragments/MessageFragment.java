@@ -24,16 +24,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.colony.R;
-import com.colony.activity.ChatActivity;
-import com.colony.activity.MainActivity;
 import com.colony.helper.Contract;
 import com.colony.helper.MessageAdapter;
 import com.colony.helper.MySingleton;
 import com.colony.model.Message;
 import com.colony.model.ServerIp;
-import com.google.firebase.messaging.RemoteMessage;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,8 +50,8 @@ public class MessageFragment extends Fragment {
     private ArrayList<Message> messages;
 
     //the id of the log_user
-    int userId = -1;
-    String get_message,sender_name,log_user,receiverName,snd_message,date_time;
+    int userNumber = -1;
+    String get_message,sender_name,log_number,receiverName,snd_message,date_time;
 
     EditText Snd_Message;
     Button Snd_btn;
@@ -81,7 +77,7 @@ public class MessageFragment extends Fragment {
 
         //Initializing message arrayList
         messages = new ArrayList<>();
-        adapter = new MessageAdapter(getActivity(), messages, userId);
+        adapter = new MessageAdapter(getActivity(), messages, userNumber);
         recyclerView.setAdapter(adapter);
 
         //Initializing send message
@@ -90,7 +86,7 @@ public class MessageFragment extends Fragment {
 
         // load the user name login
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        log_user = preferences.getString(Contract.Shared_User_Login, "");
+        log_number = preferences.getString(Contract.Shared_User_Number, "");
 
         // on send message...
         Snd_btn.setOnClickListener(new View.OnClickListener() {
@@ -98,16 +94,16 @@ public class MessageFragment extends Fragment {
             public void onClick(View v) {
 
                 snd_message = Snd_Message.getText().toString();
-                userId = -1;
+                userNumber = -1;
                 sendMessage(snd_message);
-                addMessage(userId,snd_message,date_time,"You");
+                addMessage(userNumber,snd_message,date_time,"You");
 
             }
         });
 
         //get Data...
         Intent intent = getActivity().getIntent();
-        receiverName = intent.getStringExtra(Contract.EXTRA_Chat_Name);
+        receiverName = intent.getStringExtra(Contract.EXTRA_Chat_Number);
 
 
 
@@ -126,10 +122,10 @@ public class MessageFragment extends Fragment {
             get_message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
             sender_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
             date_time = intent.getStringExtra(Contract.EXTRA_Chat_Date);
-            userId = intent.getIntExtra(Contract.Extra_Chat_UserId,-1);
+            userNumber = intent.getIntExtra(Contract.EXTRA_Chat_Number,-1);
 
             ///the number need to change!!!!!!!!!!!
-            addMessage(userId, get_message, date_time, sender_name);
+            addMessage(userNumber, get_message, date_time, sender_name);
 
 
         }
@@ -169,7 +165,7 @@ public class MessageFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("SenderName", log_user);
+                params.put("SenderName", log_number);
                 params.put("ReceiverName", receiverName);
                 params.put("body",message);
                 return params;

@@ -43,7 +43,7 @@ import com.colony.helper.ChatAdapter;
 public class ChatsFragment extends ListFragment {
 
     ArrayList<Chat> chats;
-    String server_url;
+    String server_url ,chatNumber;
     ChatAdapter chatAdapter;
     FloatingActionButton floatingActionButton;
 
@@ -86,18 +86,19 @@ public class ChatsFragment extends ListFragment {
             int j =0;
             String message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
             String title = intent.getStringExtra(Contract.EXTRA_Chat_Name);
+            String number = intent.getStringExtra(Contract.EXTRA_Chat_Number);
             for(i= 0 ; i<= chats.size()-1; i++ )
             {
-                if (title.equals(chats.get(i).getTitle()))
+                if (number.equals(chats.get(i).getNumber()))
                 {
-                    chats.set(i,new Chat(title,message));
+                    chats.set(i,new Chat(title,message,chatNumber));
                     j=1;
 
                 }
 
             }
             if(j==0) {
-               chats.add(new Chat(title, message));
+               chats.add(new Chat(title, message ,chatNumber));
             }
 
             chatAdapter.notifyDataSetChanged();
@@ -119,9 +120,9 @@ public class ChatsFragment extends ListFragment {
         btn_addChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String chatUser = editText_addChat.getText().toString();
+                chatNumber = editText_addChat.getText().toString();
 
-                server_url = ServerIp.server + "api/Users/" + chatUser;
+                server_url = ServerIp.server + "api/Users/" + chatNumber;
 
                 FindUser();
 
@@ -148,7 +149,8 @@ public class ChatsFragment extends ListFragment {
                     String message = jsonObject.getString("Message");
                     if(code.equals("user_success"))
                     {
-                        chats.add(new Chat(message, "Send him message"));
+
+                        chats.add(new Chat(message, "Send him message",chatNumber));
                         chatAdapter.notifyDataSetChanged();
 
 
@@ -197,6 +199,7 @@ public class ChatsFragment extends ListFragment {
         Intent intent =  new Intent(getActivity(), ChatActivity.class);
         intent.putExtra(Contract.EXTRA_Chat_Name, user.getTitle());
         intent.putExtra(Contract.EXTRA_Chat_Message, user.getMessage());
+        intent.putExtra(Contract.EXTRA_Chat_Number,user.getNumber());
         startActivity(intent);
 
     }
