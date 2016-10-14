@@ -32,12 +32,11 @@ import java.util.ArrayList;
 import com.colony.helper.Contract;
 import com.colony.model.Chat;
 import com.colony.activity.ChatActivity;
-import com.colony.activity.MainActivity;
 import com.colony.helper.MySingleton;
 import com.colony.R;
 import com.colony.model.ServerIp;
 
-import com.colony.helper.ChatAdapter;
+import com.colony.adapter.ChatAdapter;
 
 
 public class ChatsFragment extends ListFragment {

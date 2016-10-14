@@ -7,30 +7,15 @@
     android:orientation="vertical">
 
 
-    <RelativeLayout
+    <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/upper_fragment_message">
+        android:name="com.colony.fragments.MessageFragment"
+        android:id="@+id/fragment2"
+        tools:layout="@layout/fragment_message"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        />
 
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.colony.fragments.MessageFragment"
-            android:id="@+id/fragment2"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            tools:layout="@layout/fragment_message" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/bottom_fragment_message">
-
-        </RelativeLayout>
-
-    </RelativeLayout>
 
 </LinearLayout>

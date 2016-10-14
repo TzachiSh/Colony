@@ -25,7 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.colony.R;
 import com.colony.helper.Contract;
-import com.colony.helper.MessageAdapter;
+import com.colony.adapter.MessageAdapter;
 import com.colony.helper.MySingleton;
 import com.colony.model.Message;
 import com.colony.model.ServerIp;

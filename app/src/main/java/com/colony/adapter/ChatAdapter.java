@@ -1,4 +1,4 @@
-package com.colony.helper;
+package com.colony.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

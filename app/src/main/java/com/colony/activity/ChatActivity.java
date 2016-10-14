@@ -25,11 +25,6 @@ public class ChatActivity extends AppCompatActivity {
         receiver_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
         setTitle("Chat with "+ receiver_name);
 
-
-
-
-
-
     }
 
 
