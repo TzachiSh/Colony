@@ -25,45 +25,44 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
 /////////////////////////
-    public static boolean cancelValidation = false;
+    public static boolean cancelValidation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // toolbar
+
         setTheme(R.style.TabTheme);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
+        //// Check if user login ////
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        log_Number = preferences.getString(Contract.Shared_User_Number, "");
+        ///if user not login validation number by Sms
         if(log_Number.equals(""))
         {
             new LoginNumber(getApplication());
-
         }
-            //check if user login
-            preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            log_Number = preferences.getString(Contract.Shared_User_Number, "");
-            //Tabs Layout!!
-            //////////////////////////////////////////
-            tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-            viewPager = (ViewPager) findViewById(R.id.viewPager);
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
-            viewPagerAdapter.addFaragmets(new ChatsFragment(), "Chats");
-            viewPagerAdapter.addFaragmets(new ContactsFragment(), "Contacts");
-            viewPager.setAdapter(viewPagerAdapter);
-            tabLayout.setupWithViewPager(viewPager);
-            /////////////////////////////////////////////////////////////
-    }
+
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
+        viewPagerAdapter.addFaragmets(new ChatsFragment(), "Chats");
+        viewPagerAdapter.addFaragmets(new ContactsFragment(), "Contacts");
+        viewPager.setAdapter(viewPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+    } 
 
     @Override
     protected void onResume() {
         super.onResume();
 
         if (cancelValidation) {
-        }
-        finish();
+            finish();
         }
     }
+}
 
 
