@@ -5,8 +5,10 @@ package com.colony.model;
  */
 public class Chat {
 
-    private  String title ,message , number;
-    private  long chatId ,dateCreatedMilli;
+    private String title;
+    private String message;
+    private String number;
+    private long chatId, dateCreatedMilli;
 
     public Chat(String title, String message, String number) {
         this.title = title;
@@ -14,7 +16,7 @@ public class Chat {
         this.number = number;
     }
 
-    public Chat(String title, String message,String number, long chatId, long dateCreatedMilli) {
+    public Chat(String title, String message, String number, long chatId, long dateCreatedMilli) {
         this.title = title;
         this.message = message;
         this.number = number;
@@ -38,7 +40,7 @@ public class Chat {
         return dateCreatedMilli;
     }
 
-    public  String getNumber() {
+    public String getNumber() {
         return number;
     }
 

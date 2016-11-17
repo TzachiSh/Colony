@@ -15,7 +15,6 @@ public class ChatActivity extends AppCompatActivity {
     public static String receiver_name;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +22,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         receiver_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
-        setTitle("Chat with "+ receiver_name);
+        setTitle("Chat with " + receiver_name);
 
     }
 

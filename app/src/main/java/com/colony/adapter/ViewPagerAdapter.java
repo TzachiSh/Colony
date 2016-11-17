@@ -10,18 +10,17 @@ import java.util.ArrayList;
  * Created by zahi on 12/10/2016.
  */
 
-public class ViewPagerAdapter extends FragmentPagerAdapter{
+public class ViewPagerAdapter extends FragmentPagerAdapter {
     ArrayList<Fragment> fragments = new ArrayList<>();
-    ArrayList<String> tabTitles =  new ArrayList<>();
+    ArrayList<String> tabTitles = new ArrayList<>();
 
-    public void addFaragmets(Fragment fragments , String TabTitles)
-    {
+    public void addFaragmets(Fragment fragments, String TabTitles) {
         this.fragments.add(fragments);
         this.tabTitles.add(TabTitles);
 
 
-
     }
+
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }

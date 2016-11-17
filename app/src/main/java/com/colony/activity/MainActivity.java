@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,50 +20,48 @@ import com.colony.helper.LoginNumber;
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences preferences;
-    String log_Number ;
-/////////////////
+    String log_Number;
+    /////////////////
     Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
-/////////////////////////
+    /////////////////////////
     public static boolean cancelValidation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTheme(R.style.TabTheme);
-        setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolBar);
-        setSupportActionBar(toolbar);
-
         //// Check if user login ////
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         log_Number = preferences.getString(Contract.Shared_User_Number, "");
         ///if user not login validation number by Sms
-        if(log_Number.equals(""))
-        {
-            new LoginNumber(getApplication());
+        if (log_Number.equals("1")) {
+            new LoginNumber(getApplication(), this);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_CONTACTS}, 1);
+
+        } else {
+            setTheme(R.style.TabTheme);
+            setContentView(R.layout.activity_main);
+            // create tool bar
+            toolbar = (Toolbar) findViewById(R.id.toolBar);
+            setSupportActionBar(toolbar);
+            // create tab layout fragment
+            tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+            viewPager = (ViewPager) findViewById(R.id.viewPager);
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
+            viewPagerAdapter.addFaragmets(new ChatsFragment(), "Chats");
+            viewPagerAdapter.addFaragmets(new ContactsFragment(), "Contacts");
+            viewPager.setAdapter(viewPagerAdapter);
+            tabLayout.setupWithViewPager(viewPager);
+
         }
 
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
-        viewPagerAdapter.addFaragmets(new ChatsFragment(), "Chats");
-        viewPagerAdapter.addFaragmets(new ContactsFragment(), "Contacts");
-        viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
 
-    } 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (cancelValidation) {
-            finish();
-        }
     }
+
+
 }
 
 

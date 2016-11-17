@@ -28,7 +28,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private ArrayList<Message> messages;
 
     //Constructor
-    public MessageAdapter(Context context, ArrayList<Message> messages, int userId){
+    public MessageAdapter(Context context, ArrayList<Message> messages, int userId) {
         this.userId = userId;
         this.messages = messages;
         this.context = context;
@@ -72,7 +72,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         //Adding messages to the views
         Message message = messages.get(position);
         holder.textViewMessage.setText(message.getMessage());
-        holder.textViewTime.setText(message.getName()+", "+message.getSentAt());
+        holder.textViewTime.setText(message.getName() + ", " + message.getSentAt());
     }
 
 

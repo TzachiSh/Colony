@@ -51,12 +51,10 @@ public class MessageFragment extends Fragment {
 
     //the id of the log_user
     int userNumber = -1;
-    String get_message,sender_name,log_number,receiverName,snd_message,date_time;
+    String get_message, sender_name, log_number, receiverName, snd_message, date_time;
 
     EditText Snd_Message;
     Button Snd_btn;
-
-
 
 
     public MessageFragment() {
@@ -68,7 +66,7 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_message, container, false);
+        View view = inflater.inflate(R.layout.fragment_message, container, false);
         //Initializing recyclerView
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -81,8 +79,8 @@ public class MessageFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         //Initializing send message
-        Snd_Message = (EditText)view.findViewById(R.id.editTextMessage);
-        Snd_btn = (Button)view.findViewById(R.id.btn_send);
+        Snd_Message = (EditText) view.findViewById(R.id.editTextMessage);
+        Snd_btn = (Button) view.findViewById(R.id.btn_send);
 
         // load the user name login
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -96,7 +94,7 @@ public class MessageFragment extends Fragment {
                 snd_message = Snd_Message.getText().toString();
                 userNumber = -1;
                 sendMessage(snd_message);
-                addMessage(userNumber,snd_message,date_time,"You");
+                addMessage(userNumber, snd_message, date_time, "You");
 
             }
         });
@@ -104,7 +102,6 @@ public class MessageFragment extends Fragment {
         //get Data...
         Intent intent = getActivity().getIntent();
         receiverName = intent.getStringExtra(Contract.EXTRA_Chat_Number);
-
 
 
         // on Receive message...
@@ -122,7 +119,7 @@ public class MessageFragment extends Fragment {
             get_message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
             sender_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
             date_time = intent.getStringExtra(Contract.EXTRA_Chat_Date);
-            userNumber = intent.getIntExtra(Contract.EXTRA_Chat_Number,-1);
+            userNumber = intent.getIntExtra(Contract.EXTRA_Chat_Number, -1);
 
             ///the number need to change!!!!!!!!!!!
             addMessage(userNumber, get_message, date_time, sender_name);
@@ -132,22 +129,21 @@ public class MessageFragment extends Fragment {
 
     };
 
-    private void addMessage(int userId ,String message,String date, String senderName)
-    {
+    private void addMessage(int userId, String message, String date, String senderName) {
 
-        messages.add(new Message(userId,message,date,senderName));
+        messages.add(new Message(userId, message, date, senderName));
         scrollToBottom();
 
 
     }
-    public void sendMessage(final String message)
-    {
+
+    public void sendMessage(final String message) {
         //Get date time
         DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
         date_time = df.format(Calendar.getInstance().getTime());
 
         //set ip server
-        String server_url = ServerIp.server +"api/Messages";
+        String server_url = ServerIp.server + "api/Messages";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, new Response.Listener<String>() {
             @Override
@@ -161,13 +157,13 @@ public class MessageFragment extends Fragment {
 
             }
 
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<String, String>();
                 params.put("SenderName", log_number);
                 params.put("ReceiverName", receiverName);
-                params.put("body",message);
+                params.put("body", message);
                 return params;
 
             }
@@ -175,6 +171,7 @@ public class MessageFragment extends Fragment {
         MySingleton.getmInstance(getActivity()).addTorequestque(stringRequest);
 
     }
+
     private void scrollToBottom() {
         adapter.notifyDataSetChanged();
         if (adapter.getItemCount() > 1)

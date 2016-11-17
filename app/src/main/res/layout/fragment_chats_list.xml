@@ -22,8 +22,9 @@
         app:borderWidth="0dp"
         android:layout_marginEnd="5dp" />
 
-    <ListView android:id="@android:id/list"
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

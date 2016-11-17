@@ -18,20 +18,21 @@ import com.colony.R;
  * Created by zahi on 11/09/2016.
  */
 public class ChatAdapter extends ArrayAdapter<Chat> {
-    public static class ViewHolder{
+    public static class ViewHolder {
         TextView title;
         TextView message;
         ImageView userIcon;
 
     }
-    public ChatAdapter(Context context, ArrayList<Chat> users) {
-        super(context,0,users);
+
+    public ChatAdapter(Context context, ArrayList<Chat> chats) {
+        super(context, 0, chats);
     }
 
     @Override
-    public View getView(int position , View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         //get the data item for this position
-        Chat user = getItem(position);
+        Chat chat = getItem(position);
 
         //create a new viewholder
         ViewHolder viewHolder;
@@ -41,34 +42,27 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
 
             //set our views to our view holder so that we no longer have to go back and use find view
             //by id every time we have a new row
-            viewHolder.title= (TextView) convertView.findViewById(R.id.listItemDialogueTitle);
+            viewHolder.title = (TextView) convertView.findViewById(R.id.listItemDialogueTitle);
             viewHolder.message = (TextView) convertView.findViewById(R.id.listItemDialogueBody);
             viewHolder.userIcon = (ImageView) convertView.findViewById(R.id.listItemDialogueImg);
 
             //use set tag to remember out view holder which is holding our references to our widgets
             convertView.setTag(viewHolder);
 
-        }
-        else
-        {
+        } else {
             //we already have a view just go to our viewholder and grab the widgets from it
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
 
-
-
-        viewHolder.title.setText(user.getTitle());
-        viewHolder.message.setText(user.getMessage());
+        viewHolder.title.setText(chat.getTitle());
+        viewHolder.message.setText(chat.getMessage());
         // set Img of user ...
 
-        return  convertView;
-
+        return convertView;
 
 
     }
-
-
 
 
 }
