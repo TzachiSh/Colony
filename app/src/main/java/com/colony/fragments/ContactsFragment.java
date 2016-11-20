@@ -3,11 +3,16 @@ package com.colony.fragments;
 
 import android.app.ListFragment;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
+
+import com.colony.helper.FixPhoneNumber;
+import com.colony.model.ServerIp;
 import com.google.gson.Gson;
 import android.os.Bundle;
 
 import android.provider.ContactsContract;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +27,9 @@ import com.colony.R;
 import com.colony.adapter.ContactAdapter;
 import com.colony.helper.MySingleton;
 import com.colony.model.Contact;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 import org.json.JSONArray;
 
@@ -95,8 +103,9 @@ public class ContactsFragment extends ListFragment {
                     while (phoneCursor.moveToNext()) {
                         String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
+
                         //< set >.
-                        android_contact.setNumber(phoneNumber);
+                        android_contact.setNumber(FixPhoneNumber.fixPhoneNumber(getActivity(), phoneNumber));
                         //</ set >
                     }
                     phoneCursor.close();
@@ -128,9 +137,11 @@ public class ContactsFragment extends ListFragment {
 
     private void SendContactsToServer(final ArrayList<Contact> arrayList_Android_Contacts) {
         String jsonString =new Gson().toJson(arrayList_Android_Contacts);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, "", (String) null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, ServerIp.server +"api/user/contact", (String) null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+
+
 
 
 
@@ -161,6 +172,7 @@ public class ContactsFragment extends ListFragment {
 
 
     }
+
 
 
 }

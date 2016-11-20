@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
         //// Check if user login ////
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         log_Number = preferences.getString(Contract.Shared_User_Number, "");
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, 1);
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_CONTACTS}, 1);
         ///if user not login validation number by Sms
-        if (log_Number.equals("1")) {
+        if (log_Number.equals("")) {
             new LoginNumber(getApplication(), this);
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, 1);
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_CONTACTS}, 1);
 
         } else {
             setTheme(R.style.TabTheme);

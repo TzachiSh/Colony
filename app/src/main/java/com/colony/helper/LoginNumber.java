@@ -59,6 +59,8 @@ public class LoginNumber {
                     countryCode = numberProto.getCountryCode();
                     // save the full number in string
                     log_Number = "+" + Integer.toString(countryCode) + " " + Long.toString(nationalNumber);
+                    //
+                    log_Number = FixPhoneNumber.fixPhoneNumber(context, log_Number);
 
                     logUser();
 
@@ -138,6 +140,8 @@ public class LoginNumber {
         }
 
     }
+
+
 
 
 }
