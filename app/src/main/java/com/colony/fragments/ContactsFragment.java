@@ -3,47 +3,59 @@ package com.colony.fragments;
 
 import android.app.ListFragment;
 import android.content.ContentResolver;
-import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.colony.activity.ChatActivity;
+import com.colony.helper.Contract;
 import com.colony.helper.FixPhoneNumber;
+import com.colony.model.Chat;
 import com.colony.model.ServerIp;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.provider.ContactsContract;
-import android.telephony.TelephonyManager;
+import android.transition.CircularPropagation;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.colony.R;
 import com.colony.adapter.ContactAdapter;
 import com.colony.helper.MySingleton;
 import com.colony.model.Contact;
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
+import com.google.gson.reflect.TypeToken;
+
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ContactsFragment extends ListFragment {
-    ArrayList<Contact> arrayList_Android_Contacts;
+    ArrayList<Contact> arrayList_Android_Contacts ;
     ContactAdapter contactAdapter;
 
     public ContactsFragment() {
         // Required empty public constructor
+
     }
 
 
@@ -53,15 +65,57 @@ public class ContactsFragment extends ListFragment {
 
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
-        fp_get_android_Contacts();
+        new loadContactsAsync().execute("my string paramater");
 
         return view;
 
     }
+    private class loadContactsAsync extends AsyncTask<String, Integer, String> {
 
-    public void fp_get_android_Contacts() {
+        // Runs in UI before background thread is called
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            // Do something like display a progress bar
+        }
+
+        // This is run in a background thread
+        @Override
+        protected String doInBackground(String... params) {
+            // get the string from params, which is an array
+            String myString = params[0];
+
+            // Do something that takes a long time, for example:
+            fp_get_android_Contacts();
+
+            // Do things
+
+            // Call this to update your progress
+
+            return "this string is passed to onPostExecute";
+        }
+
+        // This is called from background thread but runs in UI
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+
+            // Do things like update the progress bar
+        }
+
+        // This runs in UI when background thread finishes
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            // Do things like hide the progress bar or change a TextView
+        }
+    }
+
+    private void fp_get_android_Contacts() {
 //----------------< fp_get_Android_Contacts() >----------------
-        ArrayList<Contact> arrayList_Android_Contacts = new ArrayList<>();
+        arrayList_Android_Contacts = new ArrayList<>() ;
 
         //--< get all Contacts >--
         Cursor cursor_Android_Contacts = null;
@@ -113,18 +167,17 @@ public class ContactsFragment extends ListFragment {
                 //----</ set >----
                 //----</ get phone number >----
 
-                // Add the contact to the ArrayList
                 arrayList_Android_Contacts.add(android_contact);
+
             }
             //----</ @Loop: all Contacts >----
 
+
             SendContactsToServer(arrayList_Android_Contacts);
 
-            //< show results >
-            ContactAdapter adapter = new ContactAdapter(getActivity(), arrayList_Android_Contacts);
-            setListAdapter(adapter);
 
-            adapter.notifyDataSetChanged();
+            //< show results >
+
             //</ show results >
 
 
@@ -133,15 +186,23 @@ public class ContactsFragment extends ListFragment {
 
     // ----------------</ fp_get_Android_Contacts() >----------------
     }
-
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        launchChatActivity(position);
+    }
 
     private void SendContactsToServer(final ArrayList<Contact> arrayList_Android_Contacts) {
-        String jsonString =new Gson().toJson(arrayList_Android_Contacts);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, ServerIp.server +"api/user/contact", (String) null, new Response.Listener<JSONArray>() {
+                StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, ServerIp.server +"api/user/contact",  new Response.Listener<String>(){
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse(String response) {
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<Contact>>(){}.getType();
+                ArrayList<Contact> contactsFromServer = gson.fromJson(response,type);
 
-
+                ContactAdapter adapter = new ContactAdapter(getActivity(), contactsFromServer);
+                setListAdapter(adapter);
+                adapter.notifyDataSetChanged();
 
 
 
@@ -150,28 +211,39 @@ public class ContactsFragment extends ListFragment {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+
             }
+
         }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
 
-                String jsonString =new Gson().toJson(arrayList_Android_Contacts);
-
-                params.put("Contacts",jsonString);
-
-
-                return params;
-
-            }
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String,String> params = new HashMap<>();
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<List<Contact>>(){}.getType();
+                        String json = gson.toJson(arrayList_Android_Contacts, type);
+                        //params.put("Content-Type", "application/json; charset=utf-8");
+                        params.put("",json);
+                        return params;
+                    }
 
 
         };
-        MySingleton.getmInstance(getActivity()).addTorequestque(jsonArrayRequest);
-
-
+        MySingleton.getInstance(getActivity()).addToRequestque(jsonObjectRequest);
 
     }
+
+    private void launchChatActivity(int position) {
+        Contact contact = (Contact) getListAdapter().getItem(position);
+
+        Intent intent = new Intent(getActivity(), ChatActivity.class);
+        intent.putExtra(Contract.EXTRA_Chat_Name, contact.getNumber());
+        intent.putExtra(Contract.EXTRA_Chat_Message, "Send a Message!");
+        intent.putExtra(Contract.EXTRA_Chat_Number, contact.getNumber());
+        startActivity(intent);
+
+    }
+
 
 
 

@@ -7,10 +7,6 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
-/**
- * Created by zahi on 20/11/2016.
- */
-
 public class FixPhoneNumber {
 
     public static String fixPhoneNumber(Context ctx , String rawNumber)
@@ -71,6 +67,12 @@ public class FixPhoneNumber {
             fixedNumber = phoneUtil.format(phoneNumberProto, PhoneNumberUtil.PhoneNumberFormat.NATIONAL);
         else
             fixedNumber = phoneUtil.format(phoneNumberProto, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
+
+        if(rawNumber.indexOf("(") == 0) {
+            fixedNumber = rawNumber.replaceAll("()", "");
+
+        }
+
 
         return fixedNumber.replace(" ", "");
 

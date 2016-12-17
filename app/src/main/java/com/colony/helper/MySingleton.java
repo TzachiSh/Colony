@@ -6,9 +6,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-/**
- * Created by zahi on 25/08/2016.
- */
 public class MySingleton {
     private static MySingleton mInstance;
     private RequestQueue requestQueue;
@@ -20,7 +17,7 @@ public class MySingleton {
 
     }
 
-    public static synchronized MySingleton getmInstance(Context context) {
+    public static synchronized MySingleton getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new MySingleton(context);
 
@@ -36,7 +33,7 @@ public class MySingleton {
         return requestQueue;
     }
 
-    public <T> void addTorequestque(Request<T> request) {
+    public <T> void addToRequestque(Request<T> request) {
         requestQueue.add(request);
 
     }

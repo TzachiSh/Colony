@@ -22,7 +22,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private Context context;
 
     //Tag for tracking self message
-    private int SELF = 786;
+    private int SELF = 783;
 
     //ArrayList of messages object containing all the messages in the thread
     private ArrayList<Message> messages;

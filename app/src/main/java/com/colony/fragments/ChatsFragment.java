@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import com.colony.activity.MainActivity;
 import com.colony.helper.Contract;
 import com.colony.model.Chat;
 import com.colony.activity.ChatActivity;
@@ -85,16 +86,17 @@ public class ChatsFragment extends ListFragment {
             String message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
             String title = intent.getStringExtra(Contract.EXTRA_Chat_Name);
             String number = intent.getStringExtra(Contract.EXTRA_Chat_Number);
+
             for (i = 0; i <= chats.size() - 1; i++) {
                 if (number.equals(chats.get(i).getNumber())) {
-                    chats.set(i, new Chat(title, message, chatNumber));
+                    chats.set(i, new Chat(title, message, number));
                     j = 1;
 
                 }
 
             }
             if (j == 0) {
-                chats.add(new Chat(title, message, chatNumber));
+                chats.add(new Chat(title, message, number));
             }
 
             chatAdapter.notifyDataSetChanged();
@@ -167,7 +169,7 @@ public class ChatsFragment extends ListFragment {
         }) {
 
         };
-        MySingleton.getmInstance(getActivity()).addTorequestque(stringRequest);
+        MySingleton.getInstance(getActivity()).addToRequestque(stringRequest);
 
     }
 

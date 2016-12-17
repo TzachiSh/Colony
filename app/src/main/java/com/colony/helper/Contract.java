@@ -7,6 +7,7 @@ public final class Contract {
     public static final String EXTRA_Chat_Message = "com.colony.message"; //key message
     public static final String EXTRA_Chat_Date = "com.colony.date"; //key Date time
     public static final String EXTRA_Chat_Number = "com.colony.number"; //key userId of the sender.
+    public static final String tryd = "com.colony.number"; //key userId of the sender.
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     public static final String ACTION_Message_CHANGED = "com.colony.changed"; //key check if receive message
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,4 +16,11 @@ public final class Contract {
     public static final String Fragment_Main_Replaced = "com.colony.replaced"; //key for replaced fragment in the main activity
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static final String ACTION_sms_valid = "com.colony.valid";
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static final int PERMISSIONS_REQUEST_R_W_SMS = 0;
+
+
+
+
+
 }

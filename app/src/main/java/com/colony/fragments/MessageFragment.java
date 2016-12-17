@@ -37,10 +37,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MessageFragment extends Fragment {
     //RecyclerView objects
     private RecyclerView recyclerView;
@@ -50,9 +46,11 @@ public class MessageFragment extends Fragment {
     private ArrayList<Message> messages;
 
     //the id of the log_user
-    int userNumber = -1;
-    String get_message, sender_name, log_number, receiverName, snd_message, date_time;
+    String stringUserNumber ,userNumberApp;
+    String get_message, sender_name, receiverName, snd_message, date_time;
+    int userId = 1;
 
+    SharedPreferences preferences;
     EditText Snd_Message;
     Button Snd_btn;
 
@@ -65,6 +63,10 @@ public class MessageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //get Data...
+        Intent intent = getActivity().getIntent();
+        receiverName = intent.getStringExtra(Contract.EXTRA_Chat_Number);
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_message, container, false);
         //Initializing recyclerView
@@ -73,18 +75,21 @@ public class MessageFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+
+        //get the number of the user
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        userNumberApp = preferences.getString(Contract.Shared_User_Number, "");
+
         //Initializing message arrayList
         messages = new ArrayList<>();
-        adapter = new MessageAdapter(getActivity(), messages, userNumber);
+        adapter = new MessageAdapter(getActivity(), messages, -1);
         recyclerView.setAdapter(adapter);
 
         //Initializing send message
         Snd_Message = (EditText) view.findViewById(R.id.editTextMessage);
         Snd_btn = (Button) view.findViewById(R.id.btn_send);
 
-        // load the user name login
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        log_number = preferences.getString(Contract.Shared_User_Number, "");
+
 
         // on send message...
         Snd_btn.setOnClickListener(new View.OnClickListener() {
@@ -92,16 +97,14 @@ public class MessageFragment extends Fragment {
             public void onClick(View v) {
 
                 snd_message = Snd_Message.getText().toString();
-                userNumber = -1;
+                userId = -1;
                 sendMessage(snd_message);
-                addMessage(userNumber, snd_message, date_time, "You");
+                addMessage(userId,stringUserNumber, snd_message, date_time, "You");
 
             }
         });
 
-        //get Data...
-        Intent intent = getActivity().getIntent();
-        receiverName = intent.getStringExtra(Contract.EXTRA_Chat_Number);
+
 
 
         // on Receive message...
@@ -119,19 +122,29 @@ public class MessageFragment extends Fragment {
             get_message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
             sender_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
             date_time = intent.getStringExtra(Contract.EXTRA_Chat_Date);
-            userNumber = intent.getIntExtra(Contract.EXTRA_Chat_Number, -1);
+            stringUserNumber = intent.getStringExtra(Contract.EXTRA_Chat_Number);
+            if (stringUserNumber.equals(userNumberApp))
+            {
+                userId = 1;
 
+            }
+            else
+            {
+                userId = 1;
+
+            }
+            addMessage(userId,stringUserNumber, get_message, date_time, sender_name);
             ///the number need to change!!!!!!!!!!!
-            addMessage(userNumber, get_message, date_time, sender_name);
+
 
 
         }
 
     };
 
-    private void addMessage(int userId, String message, String date, String senderName) {
+    private void addMessage(int userId,String userNumber, String message, String date, String senderName) {
 
-        messages.add(new Message(userId, message, date, senderName));
+        messages.add(new Message(userId,userNumber, message, date, senderName));
         scrollToBottom();
 
 
@@ -161,14 +174,14 @@ public class MessageFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("SenderName", log_number);
+                params.put("SenderName", userNumberApp);
                 params.put("ReceiverName", receiverName);
                 params.put("body", message);
                 return params;
 
             }
         };
-        MySingleton.getmInstance(getActivity()).addTorequestque(stringRequest);
+        MySingleton.getInstance(getActivity()).addToRequestque(stringRequest);
 
     }
 

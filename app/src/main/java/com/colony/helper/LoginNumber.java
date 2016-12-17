@@ -115,7 +115,7 @@ public class LoginNumber {
                 return params;
             }
         };
-        MySingleton.getmInstance(context).addTorequestque(stringRequest);
+        MySingleton.getInstance(context).addToRequestque(stringRequest);
     }
 
     private void displayAlert(final String code) {
