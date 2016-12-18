@@ -47,8 +47,7 @@ public class MessageFragment extends Fragment {
 
     //the id of the log_user
     String stringUserNumber ,userNumberApp;
-    String get_message, sender_name, receiverName, snd_message, date_time;
-    int userId = 1;
+    String get_message, sender_name, receiverNumber, snd_message, date_time;
 
     SharedPreferences preferences;
     EditText Snd_Message;
@@ -65,7 +64,7 @@ public class MessageFragment extends Fragment {
                              Bundle savedInstanceState) {
         //get Data...
         Intent intent = getActivity().getIntent();
-        receiverName = intent.getStringExtra(Contract.EXTRA_Chat_Number);
+        receiverNumber = intent.getStringExtra(Contract.EXTRA_Chat_Number);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_message, container, false);
@@ -82,7 +81,7 @@ public class MessageFragment extends Fragment {
 
         //Initializing message arrayList
         messages = new ArrayList<>();
-        adapter = new MessageAdapter(getActivity(), messages, -1);
+        adapter = new MessageAdapter(getActivity(), messages, userNumberApp);
         recyclerView.setAdapter(adapter);
 
         //Initializing send message
@@ -97,9 +96,8 @@ public class MessageFragment extends Fragment {
             public void onClick(View v) {
 
                 snd_message = Snd_Message.getText().toString();
-                userId = -1;
                 sendMessage(snd_message);
-                addMessage(userId,stringUserNumber, snd_message, date_time, "You");
+                addMessage(userNumberApp, snd_message, date_time, "You");
 
             }
         });
@@ -123,17 +121,8 @@ public class MessageFragment extends Fragment {
             sender_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
             date_time = intent.getStringExtra(Contract.EXTRA_Chat_Date);
             stringUserNumber = intent.getStringExtra(Contract.EXTRA_Chat_Number);
-            if (stringUserNumber.equals(userNumberApp))
-            {
-                userId = 1;
 
-            }
-            else
-            {
-                userId = 1;
-
-            }
-            addMessage(userId,stringUserNumber, get_message, date_time, sender_name);
+            addMessage(stringUserNumber, get_message, date_time, sender_name);
             ///the number need to change!!!!!!!!!!!
 
 
@@ -142,9 +131,9 @@ public class MessageFragment extends Fragment {
 
     };
 
-    private void addMessage(int userId,String userNumber, String message, String date, String senderName) {
+    private void addMessage(String userNumber, String message, String date, String senderName) {
 
-        messages.add(new Message(userId,userNumber, message, date, senderName));
+        messages.add(new Message(userNumber, message, date, senderName));
         scrollToBottom();
 
 
@@ -175,7 +164,7 @@ public class MessageFragment extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("SenderName", userNumberApp);
-                params.put("ReceiverName", receiverName);
+                params.put("ReceiverNumber", receiverNumber);
                 params.put("body", message);
                 return params;
 

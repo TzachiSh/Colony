@@ -12,13 +12,10 @@ import com.colony.model.Message;
 
 import java.util.ArrayList;
 
-/**
- * Created by zahi on 18/09/2016.
- */
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     //user id
-    private int userId;
+    private String userId;
     private Context context;
 
     //Tag for tracking self message
@@ -28,7 +25,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private ArrayList<Message> messages;
 
     //Constructor
-    public MessageAdapter(Context context, ArrayList<Message> messages, int userId) {
+    public MessageAdapter(Context context, ArrayList<Message> messages, String userId) {
         this.userId = userId;
         this.messages = messages;
         this.context = context;
@@ -41,7 +38,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Message message = messages.get(position);
 
         //If its owner  id is  equals to the logged in user id
-        if (message.getUsersId() == userId) {
+        if (message.getUserNumber().equals(userId)) {
             //Returning self
             return SELF;
         }
