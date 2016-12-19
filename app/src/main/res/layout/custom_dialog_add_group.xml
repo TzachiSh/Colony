@@ -8,13 +8,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Add new user"
+        android:text="Group Name"
         android:id="@+id/textView" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText_nameChat"
+        android:id="@+id/editText_nameGroup"
         android:ems="10"
         android:layout_gravity="end"
         android:layout_below="@id/textView" />
@@ -23,13 +23,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tableRowDialog"
-        android:layout_below="@id/editText_nameChat">
+        android:layout_below="@id/editText_nameGroup">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add"
-            android:id="@+id/btn_addChat"
+            android:id="@+id/btn_addGroup"
             android:layout_weight="1"
             android:layout_gravity="center_horizontal" />
 

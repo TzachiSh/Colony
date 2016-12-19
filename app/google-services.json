@@ -15,6 +15,53 @@
       },
       "oauth_client": [
         {
+          "client_id": "614477639079-00jijeg6s6oft1b6t0sq94etpll3r42n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.colony",
+            "certificate_hash": "754BCDEE8A6E03F871EED653BAB5CF109FEAFF79"
+          }
+        },
+        {
+          "client_id": "614477639079-lastejqvp5ttbc90jvfgvfr183hns9gl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBledPVoY1JkgZHvclGPo1-eVbxBPKO7Io"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:614477639079:android:cb56a7d056ba4167",
+        "android_client_info": {
+          "package_name": "alessandro.firebaseandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "614477639079-a3rut250c14p8del1qm9506idcl9f17l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "alessandro.firebaseandroid",
+            "certificate_hash": "754BCDEE8A6E03F871EED653BAB5CF109FEAFF79"
+          }
+        },
+        {
           "client_id": "614477639079-lastejqvp5ttbc90jvfgvfr183hns9gl.apps.googleusercontent.com",
           "client_type": 3
         }

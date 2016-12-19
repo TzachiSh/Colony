@@ -25,6 +25,8 @@ import com.colony.fragments.ContactsFragment;
 import com.colony.helper.Contract;
 import com.colony.helper.LoginNumber;
 import com.colony.model.Contact;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
+            ////////////////
+
+
+
+            ////////////////
         setTheme(R.style.TabTheme);
         setContentView(R.layout.activity_main);
         // create tool bar

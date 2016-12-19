@@ -4,25 +4,27 @@ package com.colony.model;
  * Created by zahi on 17/09/2016.
  */
 public class Chat {
-
+    private int chatId;
     private String title;
     private String message;
     private String number;
-    private long chatId, dateCreatedMilli;
+    private boolean isGroup = false;
+    public Chat()
+    {
 
-    public Chat(String title, String message, String number) {
+
+
+    }
+
+    public Chat(String title, String message, String number,boolean isGroup) {
         this.title = title;
         this.message = message;
         this.number = number;
+        this.isGroup = isGroup;
     }
 
-    public Chat(String title, String message, String number, long chatId, long dateCreatedMilli) {
-        this.title = title;
-        this.message = message;
-        this.number = number;
-        this.chatId = chatId;
-        this.dateCreatedMilli = dateCreatedMilli;
-    }
+
+
 
     public String getTitle() {
         return title;
@@ -36,12 +38,12 @@ public class Chat {
         return chatId;
     }
 
-    public long getDate() {
-        return dateCreatedMilli;
-    }
-
     public String getNumber() {
         return number;
+    }
+
+    public boolean isGroup() {
+        return isGroup;
     }
 
     @Override

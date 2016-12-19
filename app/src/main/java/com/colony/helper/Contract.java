@@ -1,13 +1,16 @@
 package com.colony.helper;
 
 
+import android.app.Application;
+
 public final class Contract {
     public static final String EXTRA_Chat_ID = "com.colony.identifier"; // key id of the chat
     public static final String EXTRA_Chat_Name = "com.colony.name";     // key name of the sender
     public static final String EXTRA_Chat_Message = "com.colony.message"; //key message
     public static final String EXTRA_Chat_Date = "com.colony.date"; //key Date time
     public static final String EXTRA_Chat_Number = "com.colony.number"; //key userId of the sender.
-    public static final String tryd = "com.colony.number"; //key userId of the sender.
+    public static final String EXTRA_Chat_IsGroup = "com.colony.isGroup"; //boolean Check if the chat is group
+    public static final String Extra_Chat_Position = "com.colony.position";// get the position of the chat
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     public static final String ACTION_Message_CHANGED = "com.colony.changed"; //key check if receive message
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,9 +21,4 @@ public final class Contract {
     public static final String ACTION_sms_valid = "com.colony.valid";
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static final int PERMISSIONS_REQUEST_R_W_SMS = 0;
-
-
-
-
-
 }

@@ -9,14 +9,17 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,8 +30,16 @@ import com.colony.R;
 import com.colony.helper.Contract;
 import com.colony.adapter.MessageAdapter;
 import com.colony.helper.MySingleton;
+import com.colony.model.Chat;
 import com.colony.model.Message;
 import com.colony.model.ServerIp;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -48,10 +59,12 @@ public class MessageFragment extends Fragment {
     //the id of the log_user
     String stringUserNumber ,userNumberApp;
     String get_message, sender_name, receiverNumber, snd_message, date_time;
+    int IdPosition ;
 
     SharedPreferences preferences;
     EditText Snd_Message;
     Button Snd_btn;
+    DatabaseReference myRefMessages;
 
 
     public MessageFragment() {
@@ -74,10 +87,18 @@ public class MessageFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-
         //get the number of the user
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userNumberApp = preferences.getString(Contract.Shared_User_Number, "");
+
+        //load database
+        IdPosition = intent.getIntExtra(Contract.Extra_Chat_Position,0);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        myRefMessages = database.getReferenceFromUrl("https://colonly-1325.firebaseio.com/Users/"
+                + Settings.Secure.ANDROID_ID + "/"+ userNumberApp + "/Messages/"+ receiverNumber);
+        reloadDatabase();
+
+
 
         //Initializing message arrayList
         messages = new ArrayList<>();
@@ -98,6 +119,7 @@ public class MessageFragment extends Fragment {
                 snd_message = Snd_Message.getText().toString();
                 sendMessage(snd_message);
                 addMessage(userNumberApp, snd_message, date_time, "You");
+                saveToDatabase();
 
             }
         });
@@ -123,7 +145,7 @@ public class MessageFragment extends Fragment {
             stringUserNumber = intent.getStringExtra(Contract.EXTRA_Chat_Number);
 
             addMessage(stringUserNumber, get_message, date_time, sender_name);
-            ///the number need to change!!!!!!!!!!!
+            saveToDatabase();
 
 
 
@@ -178,6 +200,35 @@ public class MessageFragment extends Fragment {
         adapter.notifyDataSetChanged();
         if (adapter.getItemCount() > 1)
             recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, adapter.getItemCount() - 1);
+    }
+
+    private void saveToDatabase ()
+    {
+        myRefMessages.setValue(messages);
+    }
+
+    private void reloadDatabase ()
+    {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                GenericTypeIndicator<ArrayList<Message>> t = new GenericTypeIndicator<ArrayList<Message>>() {};
+                ArrayList<Message> yourStringArray = snapshot.getValue(t);
+                messages.clear();
+                if(yourStringArray!= null) {
+                    messages.addAll(yourStringArray);
+                }
+                adapter.notifyDataSetChanged();
+
+                //Toast.makeText(getActivity(),yourStringArray.get(0), Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {
+                Log.e("The read failed: " ,firebaseError.getMessage());
+            }
+        };
+        myRefMessages.addValueEventListener(postListener);
+
     }
 
 

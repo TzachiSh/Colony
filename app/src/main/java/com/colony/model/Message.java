@@ -6,6 +6,12 @@ public class Message {
     private String sentAt;
     private String name;
 
+    public Message()
+    {
+
+
+    }
+
     public Message(String userNumber, String message, String sentAt, String name) {
         this.userNumber = userNumber;
         this.message = message;
