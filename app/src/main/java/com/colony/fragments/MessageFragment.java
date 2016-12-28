@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,13 +25,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.colony.R;
+import com.colony.adapter.FirebaseAdapter;
 import com.colony.helper.Contract;
 import com.colony.adapter.MessageAdapter;
 import com.colony.helper.MySingleton;
-import com.colony.model.Chat;
 import com.colony.model.Message;
 import com.colony.model.ServerIp;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -58,13 +55,13 @@ public class MessageFragment extends Fragment {
 
     //the id of the log_user
     String stringUserNumber ,userNumberApp;
-    String get_message, sender_name, receiverNumber, snd_message, date_time;
-    int IdPosition ;
-
+    String get_message, sender_name, receiverNumber, snd_message, date_time,stringGroup;
+    boolean isGroup;
+    int pos ;
     SharedPreferences preferences;
     EditText Snd_Message;
     Button Snd_btn;
-    DatabaseReference myRefMessages;
+    DatabaseReference databaseReference;
 
 
     public MessageFragment() {
@@ -92,12 +89,13 @@ public class MessageFragment extends Fragment {
         userNumberApp = preferences.getString(Contract.Shared_User_Number, "");
 
         //load database
-        IdPosition = intent.getIntExtra(Contract.Extra_Chat_Position,0);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRefMessages = database.getReferenceFromUrl("https://colonly-1325.firebaseio.com/Users/"
-                + Settings.Secure.ANDROID_ID + "/"+ userNumberApp + "/Messages/"+ receiverNumber);
-        reloadDatabase();
+        databaseReference = database.getReferenceFromUrl("https://colonly-1325.firebaseio.com/Users/" +
+                userNumberApp + "/Messages/"+ receiverNumber);
+        loadFromFirebase();
 
+        ////////
+        isGroup = intent.getBooleanExtra(Contract.EXTRA_Chat_IsGroup,false);
 
 
         //Initializing message arrayList
@@ -119,7 +117,7 @@ public class MessageFragment extends Fragment {
                 snd_message = Snd_Message.getText().toString();
                 sendMessage(snd_message);
                 addMessage(userNumberApp, snd_message, date_time, "You");
-                saveToDatabase();
+                saveToFirebase();
 
             }
         });
@@ -142,12 +140,17 @@ public class MessageFragment extends Fragment {
             get_message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
             sender_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
             date_time = intent.getStringExtra(Contract.EXTRA_Chat_Date);
+            if (isGroup)
+            {
+                stringUserNumber =intent.getStringExtra(Contract.EXTRA_Chat_SenderNumber);
+                sender_name = stringUserNumber;
+            }
+            else
+            {
             stringUserNumber = intent.getStringExtra(Contract.EXTRA_Chat_Number);
+            }
 
             addMessage(stringUserNumber, get_message, date_time, sender_name);
-            saveToDatabase();
-
-
 
         }
 
@@ -167,7 +170,7 @@ public class MessageFragment extends Fragment {
         date_time = df.format(Calendar.getInstance().getTime());
 
         //set ip server
-        String server_url = ServerIp.server + "api/Messages";
+        String server_url = ServerIp.server + "api/Messages/"+isGroup;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, new Response.Listener<String>() {
             @Override
@@ -202,12 +205,12 @@ public class MessageFragment extends Fragment {
             recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, adapter.getItemCount() - 1);
     }
 
-    private void saveToDatabase ()
+    private void saveToFirebase()
     {
-        myRefMessages.setValue(messages);
+        databaseReference.setValue(messages);
     }
 
-    private void reloadDatabase ()
+    private void loadFromFirebase()
     {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
@@ -217,8 +220,8 @@ public class MessageFragment extends Fragment {
                 messages.clear();
                 if(yourStringArray!= null) {
                     messages.addAll(yourStringArray);
+                    scrollToBottom();
                 }
-                adapter.notifyDataSetChanged();
 
                 //Toast.makeText(getActivity(),yourStringArray.get(0), Toast.LENGTH_LONG).show();
             }
@@ -227,9 +230,13 @@ public class MessageFragment extends Fragment {
                 Log.e("The read failed: " ,firebaseError.getMessage());
             }
         };
-        myRefMessages.addValueEventListener(postListener);
+        databaseReference.addValueEventListener(postListener);
 
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        saveToFirebase();
+    }
 }

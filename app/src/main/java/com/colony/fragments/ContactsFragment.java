@@ -3,25 +3,25 @@ package com.colony.fragments;
 
 import android.app.ListFragment;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.colony.activity.ChatActivity;
+import com.colony.adapter.FirebaseAdapter;
 import com.colony.helper.Contract;
 import com.colony.helper.FixPhoneNumber;
-import com.colony.model.Chat;
 import com.colony.model.ServerIp;
-import com.google.android.gms.tasks.Task;
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.provider.ContactsContract;
-import android.transition.CircularPropagation;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,15 +33,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.colony.R;
-import com.colony.adapter.ContactAdapter;
 import com.colony.helper.MySingleton;
 import com.colony.model.Contact;
 import com.google.gson.reflect.TypeToken;
 
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -50,22 +45,43 @@ import java.util.List;
 import java.util.Map;
 
 public class ContactsFragment extends ListFragment {
-    ArrayList<Contact> arrayList_Android_Contacts ;
-    ContactAdapter contactAdapter;
+    ArrayList<Contact> arrayList_Android_Contacts;
+    String userNumberApp ;
+    FirebaseDatabase database;
+    DatabaseReference databaseReference;
+    FirebaseListAdapter<Contact> ContactFbListAdapter;
+    FirebaseAdapter DbRef;
+
+
 
     public ContactsFragment() {
         // Required empty public constructor
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        DbRef = new FirebaseAdapter(getActivity());
+        arrayList_Android_Contacts = new ArrayList<>();
+        ContactFbListAdapter = DbRef.ContactAdapter();
+        setListAdapter(ContactFbListAdapter);
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
-        new loadContactsAsync().execute("my string paramater");
+        if(ContactFbListAdapter.getCount() < 1)
+        {
+            new loadContactsAsync().execute("");
+        }
+
+
 
         return view;
 
@@ -115,7 +131,7 @@ public class ContactsFragment extends ListFragment {
 
     private void fp_get_android_Contacts() {
 //----------------< fp_get_Android_Contacts() >----------------
-        arrayList_Android_Contacts = new ArrayList<>() ;
+
 
         //--< get all Contacts >--
         Cursor cursor_Android_Contacts = null;
@@ -169,13 +185,11 @@ public class ContactsFragment extends ListFragment {
 
                 arrayList_Android_Contacts.add(android_contact);
 
+
+
             }
             //----</ @Loop: all Contacts >----
-
-
-            SendContactsToServer(arrayList_Android_Contacts);
-
-
+            SendContactsToServer();
             //< show results >
 
             //</ show results >
@@ -192,17 +206,21 @@ public class ContactsFragment extends ListFragment {
         launchChatActivity(position);
     }
 
-    private void SendContactsToServer(final ArrayList<Contact> arrayList_Android_Contacts) {
+    private void SendContactsToServer() {
                 StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, ServerIp.server +"api/user/contact",  new Response.Listener<String>(){
             @Override
             public void onResponse(String response) {
                 Gson gson = new Gson();
                 Type type = new TypeToken<List<Contact>>(){}.getType();
                 ArrayList<Contact> contactsFromServer = gson.fromJson(response,type);
+                arrayList_Android_Contacts.clear();
+                arrayList_Android_Contacts.addAll(contactsFromServer);
 
-                ContactAdapter adapter = new ContactAdapter(getActivity(), contactsFromServer);
-                setListAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                saveDatabase();
+
+                ContactFbListAdapter.notifyDataSetChanged();
+
+
 
 
 
@@ -240,11 +258,16 @@ public class ContactsFragment extends ListFragment {
         intent.putExtra(Contract.EXTRA_Chat_Name, contact.getNumber());
         intent.putExtra(Contract.EXTRA_Chat_Message, "Send a Message!");
         intent.putExtra(Contract.EXTRA_Chat_Number, contact.getNumber());
+        intent.putExtra(Contract.EXTRA_Chat_IsGroup,false);
         startActivity(intent);
 
     }
 
+    private void saveDatabase()
+    {
+        DbRef.getContactRef().setValue(arrayList_Android_Contacts);
 
-
+    }
 
 }
+

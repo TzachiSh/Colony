@@ -16,27 +16,27 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        tools:replace="android:label, android:icon, android:theme">
-        <activity android:name=".activity.MainActivity">
+        android:supportsRtl="true">
+    <!-- tools:node="replace"-->
+        <activity android:name="com.colony.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <service android:name=".helper.FirebaseMessagingService">
+        <service android:name="com.colony.helper.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".helper.FirebaseInstanceIDService">
+        <service android:name="com.colony.helper.FirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.ChatActivity" />
+        <activity android:name="com.colony.activity.ChatActivity" />
     </application>
 
 </manifest>

@@ -1,10 +1,8 @@
 package com.colony.helper;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -13,7 +11,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.colony.activity.MainActivity;
 import com.colony.model.ServerIp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -134,14 +131,20 @@ public class LoginNumber {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(Contract.Shared_User_Number, log_Number);
             editor.apply();
-            database = FirebaseDatabase.getInstance();
-            databaseReference =database.getReference();
-            databaseReference.child("Users").child(Settings.Secure.ANDROID_ID).setValue(log_Number);
-            databaseReference.setValue(log_Number);
+
+
 
             // when Created  new user
             if (code.equals("reg_success")) {
 
+
+            }
+            else
+            {
+
+                database = FirebaseDatabase.getInstance();
+                databaseReference = database.getReferenceFromUrl("https://colonly-1325.firebaseio.com/Users/");
+                databaseReference.setValue(log_Number);
 
             }
 

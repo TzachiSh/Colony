@@ -1,18 +1,12 @@
 package com.colony.activity;
 
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,14 +18,11 @@ import com.colony.fragments.ChatsFragment;
 import com.colony.fragments.ContactsFragment;
 import com.colony.helper.Contract;
 import com.colony.helper.LoginNumber;
-import com.colony.model.Contact;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences preferences;
-    String log_Number;
+    String userNumberApp;
     /////////////////
     Toolbar toolbar;
     TabLayout tabLayout;
@@ -43,13 +34,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         //// Check if user login ////
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        log_Number = preferences.getString(Contract.Shared_User_Number, "");
+        userNumberApp = preferences.getString(Contract.Shared_User_Number, "");
 
         ///if user not login validation number by Sms
-        if (log_Number.equals("")) {
+        if (userNumberApp.equals("")) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE,
                     android.Manifest.permission.WRITE_CONTACTS,
                     android.Manifest.permission.READ_CONTACTS,
@@ -59,11 +49,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
-            ////////////////
 
-
-
-            ////////////////
         setTheme(R.style.TabTheme);
         setContentView(R.layout.activity_main);
         // create tool bar

@@ -18,7 +18,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
-    String title, message, date, number;
+    String title, message, date, number,isGroup ,senderNumber;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -29,6 +29,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         message = remoteMessage.getData().get("message");
         date = remoteMessage.getData().get("date").toString();
         number = remoteMessage.getData().get("tickerText");
+        isGroup = remoteMessage.getData().get("condition");
+        senderNumber = remoteMessage.getData().get("data");
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -70,6 +72,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         intent.putExtra(Contract.EXTRA_Chat_Name, title);
         intent.putExtra(Contract.EXTRA_Chat_Date, date);
         intent.putExtra(Contract.EXTRA_Chat_Number, number);
+        intent.putExtra(Contract.EXTRA_Chat_IsGroup ,isGroup);
+        intent.putExtra(Contract.EXTRA_Chat_SenderNumber, senderNumber);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Group Name"
+        android:text="Create Group"
         android:id="@+id/textView" />
 
     <EditText
@@ -17,13 +17,16 @@
         android:id="@+id/editText_nameGroup"
         android:ems="10"
         android:layout_gravity="end"
-        android:layout_below="@id/textView" />
+        android:layout_below="@id/textView"
+        android:hint="Group Name" />
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tableRowDialog"
-        android:layout_below="@id/editText_nameGroup">
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/listView3"
+        android:layout_marginBottom="170dp">
 
         <Button
             android:layout_width="wrap_content"
@@ -40,5 +43,14 @@
             android:id="@+id/btn_cancel"
             android:layout_weight="1" />
     </TableRow>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/contactDialogList"
+        android:layout_below="@+id/editText_nameGroup"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="13dp"
+        android:layout_above="@+id/tableRowDialog" />
 
 </RelativeLayout>

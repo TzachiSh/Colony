@@ -8,7 +8,7 @@ public class Chat {
     private String title;
     private String message;
     private String number;
-    private boolean isGroup = false;
+    private boolean group;
     public Chat()
     {
 
@@ -16,11 +16,11 @@ public class Chat {
 
     }
 
-    public Chat(String title, String message, String number,boolean isGroup) {
+    public Chat(String title, String message, String number,boolean group) {
         this.title = title;
         this.message = message;
         this.number = number;
-        this.isGroup = isGroup;
+        this.group = group;
     }
 
 
@@ -42,16 +42,7 @@ public class Chat {
         return number;
     }
 
-    public boolean isGroup() {
-        return isGroup;
-    }
-
-    @Override
-    public String toString() {
-        return "Chat{" +
-                "ChatId=" + chatId +
-                ", title='" + title + '\'' +
-                ", message='" + message + '\'' +
-                '}';
+    public boolean getGroup() {
+        return group;
     }
 }

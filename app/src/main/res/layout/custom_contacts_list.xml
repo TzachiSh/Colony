@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="5dp"
-        android:weightSum="3">
+        android:weightSum="3"
+        android:id="@+id/rowContact">
 
         <ImageView
             android:layout_width="80dp"

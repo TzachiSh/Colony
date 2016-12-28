@@ -10,6 +10,11 @@ public class Contact {
     private String name;
     private String number;
     private String picture;
+    public Contact ()
+    {
+
+
+    }
 
     public void setContactId(int contactId) {
         this.contactId = contactId;
