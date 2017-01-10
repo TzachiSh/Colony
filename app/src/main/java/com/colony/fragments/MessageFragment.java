@@ -31,6 +31,7 @@ import com.colony.adapter.MessageAdapter;
 import com.colony.helper.MySingleton;
 import com.colony.model.Message;
 import com.colony.model.ServerIp;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,6 +63,8 @@ public class MessageFragment extends Fragment {
     EditText Snd_Message;
     Button Snd_btn;
     DatabaseReference databaseReference;
+    FirebaseDatabase database;
+    ChildEventListener EventLisitner;
 
 
     public MessageFragment() {
@@ -89,10 +92,10 @@ public class MessageFragment extends Fragment {
         userNumberApp = preferences.getString(Contract.Shared_User_Number, "");
 
         //load database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance();
         databaseReference = database.getReferenceFromUrl("https://colonly-1325.firebaseio.com/Users/" +
-                userNumberApp + "/Messages/"+ receiverNumber);
-        loadFromFirebase();
+                userNumberApp + "/Messages");
+
 
         ////////
         isGroup = intent.getBooleanExtra(Contract.EXTRA_Chat_IsGroup,false);
@@ -100,8 +103,11 @@ public class MessageFragment extends Fragment {
 
         //Initializing message arrayList
         messages = new ArrayList<>();
+        loadFromFirebase();
         adapter = new MessageAdapter(getActivity(), messages, userNumberApp);
         recyclerView.setAdapter(adapter);
+
+
 
         //Initializing send message
         Snd_Message = (EditText) view.findViewById(R.id.editTextMessage);
@@ -116,8 +122,8 @@ public class MessageFragment extends Fragment {
 
                 snd_message = Snd_Message.getText().toString();
                 sendMessage(snd_message);
-                addMessage(userNumberApp, snd_message, date_time, "You");
-                saveToFirebase();
+                databaseReference.child(receiverNumber).push().setValue(new Message(userNumberApp, snd_message, date_time, "You"));
+
 
             }
         });
@@ -126,7 +132,7 @@ public class MessageFragment extends Fragment {
 
 
         // on Receive message...
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Contract.ACTION_Message_CHANGED));
+        //LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Contract.ACTION_Message_CHANGED));
 
         return view;
     }
@@ -140,6 +146,8 @@ public class MessageFragment extends Fragment {
             get_message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
             sender_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
             date_time = intent.getStringExtra(Contract.EXTRA_Chat_Date);
+            receiverNumber = intent.getStringExtra(Contract.EXTRA_Chat_Number);
+            isGroup = Boolean.valueOf(intent.getStringExtra(Contract.EXTRA_Chat_IsGroup));
             if (isGroup)
             {
                 stringUserNumber =intent.getStringExtra(Contract.EXTRA_Chat_SenderNumber);
@@ -150,19 +158,14 @@ public class MessageFragment extends Fragment {
             stringUserNumber = intent.getStringExtra(Contract.EXTRA_Chat_Number);
             }
 
-            addMessage(stringUserNumber, get_message, date_time, sender_name);
+            databaseReference.child(receiverNumber).push().setValue(new Message(stringUserNumber, get_message, date_time, sender_name));
+            databaseReference.removeEventListener(EventLisitner);
+
+
 
         }
 
     };
-
-    private void addMessage(String userNumber, String message, String date, String senderName) {
-
-        messages.add(new Message(userNumber, message, date, senderName));
-        scrollToBottom();
-
-
-    }
 
     public void sendMessage(final String message) {
         //Get date time
@@ -205,38 +208,46 @@ public class MessageFragment extends Fragment {
             recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, adapter.getItemCount() - 1);
     }
 
-    private void saveToFirebase()
-    {
-        databaseReference.setValue(messages);
-    }
-
     private void loadFromFirebase()
     {
-        ValueEventListener postListener = new ValueEventListener() {
+        EventLisitner = databaseReference.child(receiverNumber).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                GenericTypeIndicator<ArrayList<Message>> t = new GenericTypeIndicator<ArrayList<Message>>() {};
-                ArrayList<Message> yourStringArray = snapshot.getValue(t);
-                messages.clear();
-                if(yourStringArray!= null) {
-                    messages.addAll(yourStringArray);
-                    scrollToBottom();
-                }
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Message model = dataSnapshot.getValue(Message.class);
 
-                //Toast.makeText(getActivity(),yourStringArray.get(0), Toast.LENGTH_LONG).show();
+                messages.add(model);
+                scrollToBottom();
             }
+
             @Override
-            public void onCancelled(DatabaseError firebaseError) {
-                Log.e("The read failed: " ,firebaseError.getMessage());
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
             }
-        };
-        databaseReference.addValueEventListener(postListener);
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("stop","the perosses stoped");
+
+            }
+        });
 
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        saveToFirebase();
+
+        messages.clear();
+        adapter.notifyDataSetChanged();
     }
 }

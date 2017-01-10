@@ -1,6 +1,9 @@
 package com.colony.helper;
 
 import com.colony.activity.MainActivity;
+import com.colony.model.Message;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.RemoteMessage;
 
 
@@ -15,30 +18,43 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
+import java.util.ArrayList;
+
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
-    String title, message, date, number,isGroup ,senderNumber;
+    String title, message, date, number,isGroup ,senderNumber,userNumberApp;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        userNumberApp = preferences.getString(Contract.Shared_User_Number, "");
+        senderNumber = remoteMessage.getData().get("data");
+       if(senderNumber.equals(userNumberApp))
+        {
+            return;
+        }
 
-        sendNotification(remoteMessage.getData().get("message"), remoteMessage.getData().get("contentTitle"));
         title = remoteMessage.getData().get("contentTitle");
         message = remoteMessage.getData().get("message");
         date = remoteMessage.getData().get("date").toString();
         number = remoteMessage.getData().get("tickerText");
         isGroup = remoteMessage.getData().get("condition");
-        senderNumber = remoteMessage.getData().get("data");
 
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String log_user = preferences.getString(Contract.Shared_User_Number, "");
 
-        if (!log_user.equals("")) {
+
+        sendNotification(remoteMessage.getData().get("message"), remoteMessage.getData().get("contentTitle"));
+
+
+
+
+
+        if (!userNumberApp.equals("")) {
             retrieveMessage();
         }
+
 
 
     }
@@ -74,7 +90,28 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         intent.putExtra(Contract.EXTRA_Chat_Number, number);
         intent.putExtra(Contract.EXTRA_Chat_IsGroup ,isGroup);
         intent.putExtra(Contract.EXTRA_Chat_SenderNumber, senderNumber);
+        createMessage();
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void createMessage()
+    {
+       FirebaseDatabase database = FirebaseDatabase.getInstance();
+      DatabaseReference  databaseReference = database.getReferenceFromUrl("https://colonly-1325.firebaseio.com/Users/" +
+                userNumberApp + "/Messages");
+        String stringUserNumber;
+        if (Boolean.valueOf(isGroup))
+        {
+            stringUserNumber =  senderNumber;
+            title = senderNumber;
+        }
+        else
+        {
+            stringUserNumber = number;
+        }
+
+        databaseReference.child(number).push().setValue(new Message(stringUserNumber, message, date, title));
+
     }
 
 }

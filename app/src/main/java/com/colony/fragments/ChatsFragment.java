@@ -7,8 +7,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -56,19 +58,25 @@ public class ChatsFragment extends ListFragment {
 
 
     Chat chat;
-    String server_url, chatName, chatMessage, chatNumberId;
+    String server_url, chatName, chatMessage, chatNumberId ,userNumberApp;
     String groupId,listViewSize;
     FloatingActionButton floatingActionButton;
     Boolean isGroup;
     FirebaseAdapter LoadDatabase;
-    FirebaseListAdapter<Chat> ChatFbListAdapter;
+    static FirebaseListAdapter<Chat> ChatFbListAdapter;
     ArrayList<String> phoneList;
     Intent intent;
+
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats_list, container, false);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        userNumberApp = preferences.getString(Contract.Shared_User_Number, "");
+
+        LoadDatabase = new FirebaseAdapter(getActivity());
 
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.myFAB);
 
@@ -79,22 +87,14 @@ public class ChatsFragment extends ListFragment {
             }
         });
 
-        return view;
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
         //Load database
-        LoadDatabase = new FirebaseAdapter(getActivity());
-        //ChatAdapter();
         ChatFbListAdapter = LoadDatabase.ChatAdapter(getActivity());
         setListAdapter(ChatFbListAdapter);
         listViewSize =String.valueOf(ChatFbListAdapter.getCount());
-
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Contract.ACTION_Message_CHANGED));
+
+        return view;
+
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -153,7 +153,7 @@ public class ChatsFragment extends ListFragment {
 
     }
 
-    public void DialogAddNewChat() {
+    private void DialogAddNewChat() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.setTitle("Add Group");
         dialog.setContentView(R.layout.custom_dialog_add_group);
@@ -163,6 +163,7 @@ public class ChatsFragment extends ListFragment {
         ListView listView =(ListView)dialog.findViewById(R.id.contactDialogList);
         listView.setAdapter(LoadDatabase.ContactAdapter());
         phoneList = new ArrayList<String>();
+        phoneList.add(userNumberApp);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -215,7 +216,7 @@ public class ChatsFragment extends ListFragment {
 
     }
 
-    public void CreateGroup() {
+    private void CreateGroup() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -259,7 +260,7 @@ public class ChatsFragment extends ListFragment {
 
     }
 
-    public void AddUserToGroup()
+    private void AddUserToGroup()
     {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url+"/"+groupId+"/AddUser/", new Response.Listener<String>() {

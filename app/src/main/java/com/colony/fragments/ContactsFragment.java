@@ -12,20 +12,26 @@ import com.colony.activity.ChatActivity;
 import com.colony.adapter.FirebaseAdapter;
 import com.colony.helper.Contract;
 import com.colony.helper.FixPhoneNumber;
+import com.colony.model.Chat;
 import com.colony.model.ServerIp;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.os.CountDownTimer;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.android.volley.AuthFailureError;
@@ -44,13 +50,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.R.attr.delay;
+
 public class ContactsFragment extends ListFragment {
     ArrayList<Contact> arrayList_Android_Contacts;
     String userNumberApp ;
     FirebaseDatabase database;
     DatabaseReference databaseReference;
     FirebaseListAdapter<Contact> ContactFbListAdapter;
-    FirebaseAdapter DbRef;
+    FirebaseAdapter LoadDatabase;
+    Contact contact;
 
 
 
@@ -60,26 +69,22 @@ public class ContactsFragment extends ListFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        DbRef = new FirebaseAdapter(getActivity());
-        arrayList_Android_Contacts = new ArrayList<>();
-        ContactFbListAdapter = DbRef.ContactAdapter();
-        setListAdapter(ContactFbListAdapter);
-
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
-        if(ContactFbListAdapter.getCount() < 1)
+        LoadDatabase = new FirebaseAdapter(getActivity());
+
+        ContactFbListAdapter = LoadDatabase.ContactAdapter();
+        if(ContactFbListAdapter.getCount() == 0)
         {
+            arrayList_Android_Contacts = new ArrayList<>();
             new loadContactsAsync().execute("");
         }
+        setListAdapter(ContactFbListAdapter);
+
+
+
 
 
 
@@ -252,22 +257,40 @@ public class ContactsFragment extends ListFragment {
     }
 
     private void launchChatActivity(int position) {
-        Contact contact = (Contact) getListAdapter().getItem(position);
+        contact = (Contact) getListAdapter().getItem(position);
 
-        Intent intent = new Intent(getActivity(), ChatActivity.class);
+        final Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra(Contract.EXTRA_Chat_Name, contact.getNumber());
         intent.putExtra(Contract.EXTRA_Chat_Message, "Send a Message!");
         intent.putExtra(Contract.EXTRA_Chat_Number, contact.getNumber());
         intent.putExtra(Contract.EXTRA_Chat_IsGroup,false);
+        int listViewSize = ChatsFragment.ChatFbListAdapter.getCount();
         startActivity(intent);
+        int i ;
+        for (i=0;i<listViewSize; i++)
+        {
+            if(ChatsFragment.ChatFbListAdapter.getItem(i).getNumber().equals(contact.getNumber()))
+            {
+                return;
+
+            }
+
+        }
+
+
+        Chat chat = new Chat(contact.getName(),"", contact.getNumber(),false);
+        LoadDatabase.getChatRef().child(""+listViewSize).setValue(chat);
+
+
 
     }
 
     private void saveDatabase()
     {
-        DbRef.getContactRef().setValue(arrayList_Android_Contacts);
+        LoadDatabase.getContactRef().setValue(arrayList_Android_Contacts);
 
     }
+
 
 }
 

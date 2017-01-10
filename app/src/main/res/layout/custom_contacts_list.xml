@@ -16,7 +16,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/contact_pic"
-            android:src="@drawable/defaultuser" />
+            android:src="@mipmap/defaultuser" />
 
         <LinearLayout
             android:layout_width="match_parent"
