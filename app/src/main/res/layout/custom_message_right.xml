@@ -16,7 +16,7 @@
 
         <LinearLayout
 
-            android:padding="15dp"
+            android:padding="10dp"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -26,7 +26,8 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hello how are you?" />
+                android:text="Hello how are you?"
+                android:textSize="16dp"/>
 
             <TextView
                 android:id="@+id/textViewDate"
