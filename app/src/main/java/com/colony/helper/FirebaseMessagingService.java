@@ -67,7 +67,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         intent.putExtra(Contract.EXTRA_Chat_Name, title);
         intent.putExtra(Contract.EXTRA_Chat_Date, date);
         intent.putExtra(Contract.EXTRA_Chat_Number, number);
-        intent.putExtra(Contract.EXTRA_Chat_IsGroup ,isGroup);
+        intent.putExtra(Contract.EXTRA_Chat_IsGroup ,Boolean.valueOf(isGroup));
         intent.putExtra(Contract.EXTRA_Chat_SenderNumber, senderNumber);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
