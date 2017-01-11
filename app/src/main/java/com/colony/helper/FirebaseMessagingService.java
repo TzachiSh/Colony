@@ -1,5 +1,6 @@
 package com.colony.helper;
 
+import com.colony.activity.ChatActivity;
 import com.colony.activity.MainActivity;
 import com.colony.model.Message;
 import com.google.firebase.database.DatabaseReference;
@@ -31,10 +32,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         userNumberApp = preferences.getString(Contract.Shared_User_Number, "");
         senderNumber = remoteMessage.getData().get("data");
-       if(senderNumber.equals(userNumberApp))
+       /*if(senderNumber.equals(userNumberApp))
         {
             return;
-        }
+        }*/
 
         title = remoteMessage.getData().get("contentTitle");
         message = remoteMessage.getData().get("message");
@@ -60,8 +61,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
 
     private void sendNotification(String messageBody, String contentTitle) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ChatActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(Contract.EXTRA_Chat_Message, message);
+        intent.putExtra(Contract.EXTRA_Chat_Name, title);
+        intent.putExtra(Contract.EXTRA_Chat_Date, date);
+        intent.putExtra(Contract.EXTRA_Chat_Number, number);
+        intent.putExtra(Contract.EXTRA_Chat_IsGroup ,isGroup);
+        intent.putExtra(Contract.EXTRA_Chat_SenderNumber, senderNumber);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
