@@ -32,14 +32,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         userNumberApp = preferences.getString(Contract.Shared_User_Number, "");
         senderNumber = remoteMessage.getData().get("data");
-       /*if(senderNumber.equals(userNumberApp))
+      if(senderNumber.equals(userNumberApp))
         {
             return;
-        }*/
+        }
 
         title = remoteMessage.getData().get("contentTitle");
         message = remoteMessage.getData().get("message");
-        date = remoteMessage.getData().get("date").toString();
+        date = remoteMessage.getData().get("date");
         number = remoteMessage.getData().get("tickerText");
         isGroup = remoteMessage.getData().get("condition");
 
