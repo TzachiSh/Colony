@@ -2,6 +2,6 @@ package com.colony.model;
 
 public class ServerIp {
 
-    public final static String server = "http://46.116.75.162/";
+    public final static String server = "http://xxxxxxxxxxx/";
 
 }
