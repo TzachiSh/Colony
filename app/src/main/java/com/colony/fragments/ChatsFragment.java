@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ListFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,20 +39,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.colony.activity.CheckListActivity;
 import com.colony.adapter.FirebaseAdapter;
 import com.colony.helper.Contract;
 import com.colony.model.Chat;
 import com.colony.activity.ChatActivity;
 import com.colony.helper.MySingleton;
 import com.colony.R;
-import com.colony.model.Contact;
 import com.colony.model.ServerIp;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -67,7 +67,18 @@ public class ChatsFragment extends ListFragment {
     ArrayList<String> phoneList;
     Intent intent;
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
 
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                DialogDeleteChat(position);
+                return false;
+            }
+        });
+        super.onActivityCreated(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,8 +101,12 @@ public class ChatsFragment extends ListFragment {
         //Load database
         ChatFbListAdapter = LoadDatabase.ChatAdapter(getActivity());
         setListAdapter(ChatFbListAdapter);
+
+
         listViewSize =String.valueOf(ChatFbListAdapter.getCount());
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Contract.ACTION_Message_CHANGED));
+
+
 
         return view;
 
@@ -130,7 +145,6 @@ public class ChatsFragment extends ListFragment {
             ChatFbListAdapter.notifyDataSetChanged();
         }
     };
-
 
 
 
@@ -225,10 +239,10 @@ public class ChatsFragment extends ListFragment {
                 AddUserToGroup();
                 if(ChatFbListAdapter.getCount() == 0)
                 {
-                    LoadDatabase.getChatRef().child(listViewSize).setValue(new Chat(chatName, chatMessage, groupId, isGroup));
+                    LoadDatabase.getChatRef().child(""+ChatFbListAdapter.getCount()).setValue(new Chat(chatName, chatMessage, groupId, isGroup));
                 }
                 else {
-                    LoadDatabase.getChatRef().child(listViewSize+1).setValue(new Chat(chatName, chatMessage, groupId, isGroup));
+                    LoadDatabase.getChatRef().child(""+ChatFbListAdapter.getCount()+1).setValue(new Chat(chatName, chatMessage, groupId, isGroup));
                 }
 
 
@@ -296,6 +310,31 @@ public class ChatsFragment extends ListFragment {
 
         };
         MySingleton.getInstance(getActivity()).addToRequestque(stringRequest);
+
+    }
+    private void DialogDeleteChat(final int position)
+    {
+
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+        alertDialog.setTitle("Delete");
+        alertDialog.setMessage("You sure you want delete this chat?");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ChatFbListAdapter.getRef(position).removeValue();
+                        LoadDatabase.getMessageRef().child(ChatFbListAdapter.getItem(position).getNumber()).removeValue();
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.show();
+
+
 
     }
 

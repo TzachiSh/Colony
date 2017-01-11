@@ -54,9 +54,6 @@ import static android.R.attr.delay;
 
 public class ContactsFragment extends ListFragment {
     ArrayList<Contact> arrayList_Android_Contacts;
-    String userNumberApp ;
-    FirebaseDatabase database;
-    DatabaseReference databaseReference;
     FirebaseListAdapter<Contact> ContactFbListAdapter;
     FirebaseAdapter LoadDatabase;
     Contact contact;

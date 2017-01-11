@@ -4,12 +4,14 @@ package com.colony.fragments;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,6 +27,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.colony.R;
+import com.colony.activity.ChatActivity;
+import com.colony.activity.CheckListActivity;
 import com.colony.adapter.FirebaseAdapter;
 import com.colony.helper.Contract;
 import com.colony.adapter.MessageAdapter;
@@ -123,49 +127,14 @@ public class MessageFragment extends Fragment {
                 snd_message = Snd_Message.getText().toString();
                 sendMessage(snd_message);
                 databaseReference.child(receiverNumber).push().setValue(new Message(userNumberApp, snd_message, date_time, "You"));
+                Snd_Message.setText("");
 
 
             }
         });
 
-
-
-
-        // on Receive message...
-        //LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Contract.ACTION_Message_CHANGED));
-
         return view;
     }
-
-
-    // on Receive message...
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            get_message = intent.getStringExtra(Contract.EXTRA_Chat_Message);
-            sender_name = intent.getStringExtra(Contract.EXTRA_Chat_Name);
-            date_time = intent.getStringExtra(Contract.EXTRA_Chat_Date);
-            receiverNumber = intent.getStringExtra(Contract.EXTRA_Chat_Number);
-            isGroup = Boolean.valueOf(intent.getStringExtra(Contract.EXTRA_Chat_IsGroup));
-            if (isGroup)
-            {
-                stringUserNumber =intent.getStringExtra(Contract.EXTRA_Chat_SenderNumber);
-                sender_name = stringUserNumber;
-            }
-            else
-            {
-            stringUserNumber = intent.getStringExtra(Contract.EXTRA_Chat_Number);
-            }
-
-            databaseReference.child(receiverNumber).push().setValue(new Message(stringUserNumber, get_message, date_time, sender_name));
-            databaseReference.removeEventListener(EventLisitner);
-
-
-
-        }
-
-    };
 
     public void sendMessage(final String message) {
         //Get date time
@@ -246,8 +215,6 @@ public class MessageFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         messages.clear();
-        adapter.notifyDataSetChanged();
     }
 }

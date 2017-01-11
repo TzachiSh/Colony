@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="60dp">
+    <CheckBox android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content" android:layout_width="wrap_content"
+        android:id="@+id/checkBox" android:layout_centerVertical="true"
+        android:focusable="false"/>
+    <TextView android:lines="1" android:id="@+id/checkName"
+        android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed  diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. "
+        android:layout_height="wrap_content" android:layout_width="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_toRightOf="@+id/checkBox"
+        android:layout_alignTop="@+id/checkBox"
+        android:layout_toLeftOf="@+id/checkCount"
+        android:layout_marginLeft="6dp" />
+    <TextView
+        android:text="Lorem ipsum dolor sit amet, consetetur sadip"
+        android:layout_height="wrap_content" android:layout_width="wrap_content"
+        android:layout_below="@+id/checkName" android:layout_alignLeft="@+id/checkName"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:lines="1" android:layout_toLeftOf="@+id/checkCount"
+        android:id="@+id/checkUser" />
+    <TextView android:id="@+id/checkCount" android:text="TextView"
+        android:layout_height="match_parent" android:layout_width="wrap_content"
+        android:layout_alignParentRight="true" android:gravity="center_vertical|right"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#2B78E4" android:layout_marginLeft="6dp" />
+    </RelativeLayout>
