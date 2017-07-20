@@ -69,7 +69,7 @@ public class FixPhoneNumber {
             fixedNumber = phoneUtil.format(phoneNumberProto, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
 
         if(rawNumber.indexOf("(") == 0) {
-            fixedNumber = rawNumber.replaceAll("()", "");
+             fixedNumber = rawNumber.replaceAll("[()]", "").trim();
 
         }
 
